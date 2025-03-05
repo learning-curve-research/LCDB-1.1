@@ -9,6 +9,14 @@
 ├── 📂 lcdb_function — Functions for computing
 └── Files for Cluster Computing
 ```
+
+### Installation for analysis
+
+1. Download the precomputed learning curves from https://surfdrive.surf.nl/files/index.php/s/MtjBoStRcOZxJt6 and extract them to the folder `dataset`.
+2. Install the packages in `analysis/requirements.txt`. 
+
+Note: for the existing analysis notebooks, it is assumed that `latex` is installed on the current machine, otherwise you may run into errors. 
+
 ### Workflow for experiments
 Previous: 
 1. Ensure there are three folder under path `/lcdb1.1`: `jobs`, `logs`, `results`. 
