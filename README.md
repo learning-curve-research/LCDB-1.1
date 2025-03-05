@@ -14,8 +14,11 @@
 
 1. Download the precomputed learning curves from https://surfdrive.surf.nl/files/index.php/s/MtjBoStRcOZxJt6 and extract them to the folder `dataset`.
 2. Install the packages in `analysis/requirements.txt`. 
+3. For the existing analysis notebooks, it is assumed that `latex` is installed on the current machine, otherwise you may run into errors. So please install `latex`.
+4. The jupyter notebooks in the `analysis` folder illustrate the useage. For a simple example, see `database - shape.ipynb`.
 
-Note: for the existing analysis notebooks, it is assumed that `latex` is installed on the current machine, otherwise you may run into errors. 
+Different versions of the data:
+- Cheng can you explain the filenames here? 
 
 ### Workflow for experiments
 Previous: 
