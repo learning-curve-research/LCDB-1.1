@@ -14,7 +14,13 @@
 
 1. Download the precomputed learning curves from https://surfdrive.surf.nl/files/index.php/s/MtjBoStRcOZxJt6 and extract them to the folder `dataset`.
 2. Install the packages in `analysis/requirements.txt`. 
-3. For the existing analysis notebooks, it is assumed that `latex` is installed on the current machine, otherwise you may run into errors. So please install `latex`.
+3. For the existing analysis notebooks, it is assumed that `latex` and several fonts, and `dvipng` is installed. Install with:
+
+```
+sudo apt install dvipng
+sudo apt install texlive-latex-extra texlive-fonts-recommended cm-super
+```
+   
 4. The jupyter notebooks in the `analysis` folder illustrate the useage. For a simple example, see `database - shape.ipynb`.
 
 Different versions of the data:
