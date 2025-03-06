@@ -23,8 +23,26 @@ sudo apt install texlive-latex-extra texlive-fonts-recommended cm-super
    
 4. The jupyter notebooks in the `analysis` folder illustrate the useage. For a simple example, see `database - shape.ipynb`.
 
-Different versions of the data:
-- Cheng can you explain the filenames here? 
+### Different versions of the data:
+
+The dataset names follow this format:
+```
+LCDB11_<Metric>_<Dataset>_<Feature Scaling>_<Data Acquisition>...
+```
+
+Each component represents different characteristics, explained as follows:
+- **Metric**: `ER` Stands for `Error Rate`.
+- **Dataset**: The dataset we used for generating learning curves. 
+    - `CC-18` indicates that the dataset `CC-18 Benchmark`, which consists of 72 datasets.
+    - `265` indicated that the superset of the dataset in LCDB 1.0 and `CC-18`, which consists of 265 datasets. 
+- **Feature Scaling**: The different feature scaling techniques for preprocessing data. 
+    - `noFS`: no feature scaling
+    - `minmaxFS`: min-max feature scaling
+    - `standardFS`: standardization feature scaling (z-score normalization)
+- **Data Acquisition**: Assumptions about how the data is acquired and preprocessed.
+  - `clean`: Preprocessing is performed on the entire dataset, assuming access to clean data.
+  - `raw`: Preprocessing is performed only on the training set, simulating a more realistic scenario where data cleaning is required.
+
 
 ### Workflow for experiments
 Previous: 
@@ -37,10 +55,10 @@ Previous:
 7. Use `jobs_gen_database.py` to generate the dataset. 
 
 ### Updated LCDB 1.1 Features 
-| Database   | Imputation               | Feature Scaling | Estimation Anchor               | Learner \| Dataset  |
+| Database   | Data Acquisition             | Feature Scaling | Estimation Anchor               | Learner \| Dataset  |
 |------------|--------------------------|-----------------|---------------------------------|----------------------|
-| **LCDB 1.0**  | globally                 | ❌              | ⌈ 16 ⋅ 2<sup>n/2</sup> ⌉               | 20 \| 220 (246) |
-| **LCDB 1.1**  | train-only & globally   | ✅              | 4 times denser                 | 28 \| 265            |
+| **LCDB 1.0**  | clean          | ❌              | ⌈ 16 ⋅ 2<sup>n/2</sup> ⌉               | 20 \| 220 (246) |
+| **LCDB 1.1**  | clean & raw   | ✅              | 4 times denser                 | 28 \| 265            |
 ### Useful Settings
 ##### Anchor
 $S_{Anchor} = \lceil 16 \cdot 2^{k/d} \rceil$ where $k \in \{0, 1, 2, 3, ...\}$

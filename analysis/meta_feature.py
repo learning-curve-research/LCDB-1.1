@@ -17,12 +17,14 @@ anchor_list_denser = np.ceil(16 * 2 ** ((np.arange(137)) / 8)).astype(int)
 # for dataset_id in dataset_ids:
 #     X, y = get_dataset(dataset_id, feature_scaling=False, mix=False, preprocess=True)
 #     num_class = len(set(y))
-#     column_counts.append(X.shape[1])
+    # # Remove columns where all rows have the same value across the column
+    # unique_rows = np.unique(X, axis=1)
+    # column_counts.append(unique_rows.shape[1])
 #     class_counts.append(num_class)
 # column_counts_str = ', '.join(map(str, column_counts))
 # class_counts_str = ', '.join(map(str, class_counts))
 feature_num_CC18 = [73, 16, 4, 216, 76, 9, 64, 6, 47, 24, 62, 46, 61, 16, 8, 51, 57, 287, 27, 18, 14, 36, 91, 617, 27, 70, 21, 719, 37, 37, 21, 21, 21, 21, 51, 4, 4, 856, 51, 561, 11, 500, 174, 72, 5, 41, 24, 256, 30, 105, 1776, 68, 32, 160, 156, 21, 40, 126, 360, 33, 784, 3072, 77, 21, 3113, 240, 27, 5, 16, 18, 784, 6]
-
+feature_num_CC18_remove_redundancy = [73, 16, 4, 213, 76, 9, 64, 6, 47, 24, 62, 43, 61, 16, 8, 51, 57, 255, 27, 18, 14, 36, 63, 617, 27, 70, 21, 718, 37, 37, 21, 21, 21, 21, 51, 4, 4, 694, 50, 540, 11, 500, 152, 72, 5, 41, 24, 256, 30, 105, 1776, 68, 32, 158, 155, 21, 37, 126, 360, 33, 784, 3072, 76, 21, 1525, 240, 27, 5, 16, 18, 784, 6]
 class_num_CC18 = [2, 26, 3, 10, 10, 2, 10, 10, 10, 3, 10, 2, 2, 10, 2, 2, 2, 3, 2, 4, 2, 6, 5, 26, 11, 4, 6, 10, 2, 2, 2, 2, 2, 2, 2, 2, 2, 9, 6, 6, 2, 2, 2, 2, 2, 2, 4, 10, 2, 2, 2, 2, 5, 2, 2, 2, 11, 3, 3, 2, 46, 10, 8, 4, 2, 10, 7, 2, 7, 2, 10, 3]
 
 learner_zoo = [ 'SVC_linear', 'SVC_poly', 'SVC_rbf', 'SVC_sigmoid', 'Decision Trees', 'ExtraTrees','LogisticRegression', 'PassiveAggressive', 'Perceptron', 'RidgeClassifier', 'SGDClassifier', 'MLP', 'LDA', 'QDA', 'BernoulliNB', 'MultinomialNB', 'ComplementNB', 'GaussianNB','KNN', 'NearestCentroid', 'ens.ExtraTrees', 'ens.RandomForest', 'ens.GradientBoosting','DummyClassifier']

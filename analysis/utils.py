@@ -1,6 +1,7 @@
 import numpy as np
 import scipy
 import scipy.stats as stats
+from sklearn.metrics import mean_squared_error
 from tqdm import tqdm
 # from scipy.stats import t
 
@@ -829,7 +830,7 @@ def get_num_par(model_id):
         return 2
     if model_id in ['pow3', 'exp3', 'vap3', 'expp3', 'expd3', 'logpower3']:
         return 3
-    if model_id in ['mmf4', 'wbl4', 'exp4', 'pow4']:
+    if model_id in ['mmf4', 'wbl4', 'exp4', 'pow4', 'janoschek4']:
         return 4
 
 
@@ -891,6 +892,8 @@ def fit_model(sizes, scores, sizes_extrapolation, model_id, rep=5, verbose=True)
             fun = lambda x: a / (1 + (x / np.exp(b)) ** c)
         if model_id == 'last1':
             fun = lambda x: (a + x) - x  # casts the prediction to have the correct size
+        if model_id == 'janoschek4': 
+            fun = lambda x: a - b * np.exp(-c * x ** d)
         return fun
 
     def objective(beta):  # this returns the residuals of the fit on the training points
@@ -977,3 +980,55 @@ def fit_model(sizes, scores, sizes_extrapolation, model_id, rep=5, verbose=True)
 
     best_beta = beta_list[best_i]
     return best_beta, get_fun(best_beta), fails_init, fails_fit
+
+def curves_models_fitting(lc_data, model_names, extrapolate, mask_anchor_number, eval_anchor_number, rep=10, verbose=False):
+    fitting_results = []
+
+    # remove nan in curve & align with anchor index
+    mask_indices = ~np.isnan(lc_data)
+    scores = lc_data[mask_indices]
+    schedule = anchor_list_denser[mask_indices]
+    
+    for model_name in model_names:
+
+        try:    # fitting
+            if extrapolate: 
+                train_schedule = np.array(schedule)[:-mask_anchor_number] # training length
+                regress_target = np.array(scores)[:-mask_anchor_number]
+            else: 
+                train_schedule = np.array(schedule) 
+                regress_target = np.array(scores)
+            beta, model, fails_init, fails_fit = fit_model(
+                train_schedule, regress_target, 
+                np.array(schedule),  # extrapolation length
+                model_name, rep=rep, verbose=verbose)
+            
+            # predictions 
+            predictions = model(np.array(schedule))
+            ######################### avoid extreme large MSE
+            # predictions[predictions>1] = 1
+            # predictions[predictions<0] = 0
+            #########################
+            # MSE between predictions and actual scores
+            if extrapolate: 
+                mse = mean_squared_error(np.array(scores)[-eval_anchor_number:], predictions[-eval_anchor_number:])
+            else: # whole curve
+                mse = mean_squared_error(np.array(scores), predictions)
+
+            fitting_results.append({
+                "schedule": schedule,
+                "scores": scores,
+                "predictions": predictions,
+                "mse": mse,      
+                "curve_model": model_name,
+                "beta": beta,
+                "fails_init": fails_init,
+                "fails_fit": fails_fit
+            })
+
+        except Exception as e:
+            # failed fitting
+            if verbose:
+                print(f"Failed to fit model {model_name} for current learning curve. Error: {e}")
+        
+    return fitting_results

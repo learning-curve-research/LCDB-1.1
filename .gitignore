@@ -12,6 +12,7 @@ analysis/backup/*
 *.json
 *.ipynb_checkpoints
 *.csv
+*.hdf5
 
 experiments/
 
