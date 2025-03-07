@@ -12,7 +12,7 @@
 
 ### Installation for analysis
 
-1. Download the precomputed learning curves from https://surfdrive.surf.nl/files/index.php/s/MtjBoStRcOZxJt6 and extract them to the folder `dataset`.
+1. Download the precomputed learning curves from [here](https://surfdrive.surf.nl/files/index.php/s/4PEosYYoiHwB6uy) and extract them to the folder `dataset`.
 2. Install the packages in `analysis/requirements.txt`. 
 3. For the existing analysis notebooks, it is assumed that `latex` and several fonts, and `dvipng` is installed. Install with:
 
@@ -45,7 +45,8 @@ Each component represents different characteristics, explained as follows:
 
 
 ### Workflow for experiments
-Previous: 
+To ensure the reproducibility, please download the container [here](https://surfdrive.surf.nl/files/index.php/s/TSe0nqWKcT5jPwK)
+
 1. Ensure there are three folder under path `/lcdb1.1`: `jobs`, `logs`, `results`. 
 2. Run jobs_create.ipynb to create the jobs of generating learning curves with different setting combinations. 
 3. Submit the jobs through `job_container.sh`. 
