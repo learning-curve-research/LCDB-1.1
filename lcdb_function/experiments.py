@@ -3,28 +3,16 @@ import numpy as np
 from lcdb import get_dataset, get_entry_learner
 import sys, traceback
 
-def run_experiment(openmlid, feature_scaling, mix, realistic, fs_realistic, algorithm, outer_seed, inner_seed, anchor, monotonic):
+def run_experiment_on_X_y(X, y,  realistic, fs_realistic, algorithm, outer_seed, inner_seed, anchor, monotonic):
 
     info = {
-            "openmlid": openmlid,
-            "feature_scaling": feature_scaling,
-             "mix": mix,
-             "realistic": realistic,
-             "fs_realistic": fs_realistic,
-             "learner": algorithm,
-             "outer_seed": outer_seed,
-             "inner_seed": inner_seed,
-             "anchor": anchor
+            "realistic": realistic,
+            "fs_realistic": fs_realistic,
+            "learner": algorithm,
+            "outer_seed": outer_seed,
+            "inner_seed": inner_seed,
+            "anchor": anchor
         }
-
-    print(f"Loading dataset {openmlid}")
-    X, y = get_dataset(openmlid, feature_scaling=feature_scaling, mix=mix, preprocess=~realistic)
-    labels = list(np.unique(y))
-    is_binary = len(labels) == 2
-    minority_class = labels[np.argmin([np.count_nonzero(y == label) for label in labels])]
-    print(f"Labels are: {labels}")
-    print(f"minority_class is {minority_class}")
-    print("Now computing the anchor ")
 
     # seeding should be done just before computing the learning curve
     SEED = 42
@@ -58,8 +46,6 @@ def run_experiment(openmlid, feature_scaling, mix, realistic, fs_realistic, algo
         learner_name = algorithm
         learner_params = {}
 
-    print(f"learner={algorithm}, size_train={anchor}, outer_seed={outer_seed}, inner_seed={inner_seed}")
-
     status = "init"
 
     # the default context sometimes runs into errors on the cluster
@@ -68,7 +54,17 @@ def run_experiment(openmlid, feature_scaling, mix, realistic, fs_realistic, algo
 
     try:
         info.update(
-            get_entry_learner(learner_name, learner_params, X, y, anchor, outer_seed, inner_seed, realistic, feature_scaling, monotonic=monotonic)
+            get_entry_learner(
+                learner_name=learner_name,
+                learner_params=learner_params,
+                X=X,
+                y=y,
+                anchor=anchor,
+                outer_seed=outer_seed,
+                inner_seed=inner_seed,
+                realistic=realistic,
+                fs_realisic=fs_realistic,
+                monotonic=monotonic)
         )
         status = "ok"
     
@@ -88,3 +84,14 @@ def run_experiment(openmlid, feature_scaling, mix, realistic, fs_realistic, algo
     info["status"] = status
 
     return info
+
+
+def abc():
+    print(f"Loading dataset {openmlid}")
+    X, y = get_dataset(openmlid, feature_scaling=feature_scaling, mix=mix, preprocess=~realistic)
+    labels = list(np.unique(y))
+    is_binary = len(labels) == 2
+    minority_class = labels[np.argmin([np.count_nonzero(y == label) for label in labels])]
+    print(f"Labels are: {labels}")
+    print(f"minority_class is {minority_class}")
+    print("Now computing the anchor ")

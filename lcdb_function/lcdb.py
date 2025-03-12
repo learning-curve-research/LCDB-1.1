@@ -365,6 +365,17 @@ def get_truth_and_predictions(
             predict_time_test, predict_proba_time_test, 
             )
 
+def get_schedule(n):
+    schedule = []
+    i = 0
+    while True:
+        a = int(np.ceil(16 * 2 ** (i / 8)))
+        if a > n:
+            break
+        schedule.append(a)
+        i += 1
+    return schedule
+
 def get_entry_learner(
         learner_name,
         learner_params,
