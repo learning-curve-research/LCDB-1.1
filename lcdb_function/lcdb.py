@@ -247,20 +247,38 @@ def get_inner_split(X, y, outer_seed, inner_seed):
                                                                                       
     return X_train, X_valid, X_test, y_train, y_valid, y_test
 
-def get_splits_for_anchor(X, y, anchor, outer_seed, inner_seed):
+def get_splits_for_anchor(X, y, anchor, outer_seed, inner_seed, monotonic):
     if issparse(y):
         y = y.toarray()
     y = np.ravel(y)
     X_train, X_valid, X_test, y_train, y_valid, y_test = get_inner_split(X, y, outer_seed, inner_seed)
     if anchor > X_train.shape[0]:
         raise ValueError(f"Invalid anchor {anchor} when available training instances are only {X_train.shape[0]}.")
-    return X_train[:anchor], X_valid, X_test, y_train[:anchor], y_valid, y_test
+    if monotonic:
+        return X_train[:anchor], X_valid, X_test, y_train[:anchor], y_valid, y_test
+    else:
+        indices = sorted(np.random.RandomState(anchor).choice(range(len(X_train)), anchor, replace=False))
+        print(anchor, len(indices))
+        print(indices)
+        return X_train[indices], X_valid, X_test, y_train[indices], y_valid, y_test
 
 
-def get_truth_and_predictions(learner_inst, X, y, anchor, outer_seed=0, inner_seed=0, realistic=False, fs_realisic=True, mixNB=False, verbose=False):
+def get_truth_and_predictions(
+        learner_inst,
+        X,
+        y,
+        anchor,
+        outer_seed=0,
+        inner_seed=0,
+        realistic=False,
+        fs_realisic=True,
+        mixNB=False,
+        monotonic=True,
+        verbose=False
+        ):
 
     # create a random split based on the seed
-    X_train, X_valid, X_test, y_train, y_valid, y_test = get_splits_for_anchor(X, y, anchor, outer_seed, inner_seed)
+    X_train, X_valid, X_test, y_train, y_valid, y_test = get_splits_for_anchor(X, y, anchor, outer_seed, inner_seed, monotonic)
 
     # fit the model
     start_time = time.time()
@@ -347,7 +365,20 @@ def get_truth_and_predictions(learner_inst, X, y, anchor, outer_seed=0, inner_se
             predict_time_test, predict_proba_time_test, 
             )
 
-def get_entry_learner(learner_name, learner_params, X, y, anchor, outer_seed, inner_seed, realistic, fs_realisic, encoder = DirectEncoder(), verbose=False):
+def get_entry_learner(
+        learner_name,
+        learner_params,
+        X,
+        y,
+        anchor,
+        outer_seed,
+        inner_seed,
+        realistic,
+        fs_realisic,
+        monotonic,
+        encoder = DirectEncoder(),
+        verbose=False
+        ):
     
     # get learner
     learner_class = get_class(learner_name)
@@ -357,7 +388,7 @@ def get_entry_learner(learner_name, learner_params, X, y, anchor, outer_seed, in
     (y_train, y_valid, y_test, y_hat_train, y_hat_valid, y_prob_valid, y_hat_test, y_prob_test, 
     known_labels, train_time, predict_time_train, predict_time_valid, 
     predict_proba_time_valid, predict_time_test, predict_proba_time_test
-    ) = get_truth_and_predictions(learner_inst, X, y, anchor, outer_seed, inner_seed, realistic, fs_realisic, verbose=verbose)
+    ) = get_truth_and_predictions(learner_inst, X, y, anchor, outer_seed, inner_seed, realistic, fs_realisic, monotonic, verbose=verbose)
     # print("Val accuracy: ",accuracy_score(y_valid , y_hat_valid))
     # print("Test accuracy: ",accuracy_score(y_test , y_hat_test))
     
