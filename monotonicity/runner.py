@@ -5,6 +5,7 @@ import sys
 import pathlib
 import json
 from tqdm import tqdm
+import itertools as it
 
 
 def run_experiment_outer(keyfields: dict, result_processor, custom_config):
@@ -19,8 +20,25 @@ def run_experiment_outer(keyfields: dict, result_processor, custom_config):
     schedule = get_schedule(0.81 * len(X))  # training size is 90% of the 90% not used for test.
     print(schedule)
 
-    outer_seeds = range(5)
-    inner_seeds = range(5)
+    # define everything to be covered in this experiment
+    domains = {
+         "outer_seed": range(5),
+         "inner_seed": range(5),
+         "anchor": schedule,
+         "feature_scaling": [False, True],
+         "mix": [False, True],
+         "realistic": [False, True],
+         "fs_realistic": [False, True],
+         "algorithm": [
+             "sklearn.discriminant_analysis.LinearDiscriminantAnalysis",
+             "SVC_sigmoid",
+             "sklearn.neural_network.MLPClassifier",
+             "sklearn.linear_model.RidgeClassifier",
+             "sklearn.neighbors.NearestCentroid"
+             ]
+    }
+    all_combinations = list(it.product(*domains.values()))
+
 
     pbar = tqdm(total=len(outer_seeds) * len(inner_seeds) * len(schedule))
     report = {}
