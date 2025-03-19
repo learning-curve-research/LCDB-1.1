@@ -27,11 +27,11 @@ def run_experiment_outer(keyfields: dict, result_processor, custom_config):
         "realistic": [False, True],
         "fs_realistic": [False, True],
         "algorithm": [
-            #"lda",
+            "lda",
             "SVC_sigmoid",
-            #"sklearn.neural_network.MLPClassifier",
-            #"sklearn.linear_model.RidgeClassifier",
-            #"sklearn.neighbors.NearestCentroid"
+            "sklearn.neural_network.MLPClassifier",
+            "sklearn.linear_model.RidgeClassifier",
+            "sklearn.neighbors.NearestCentroid"
             ],
         "monotonicity": ["none", "outer", "inner", "anchor"]
     }
