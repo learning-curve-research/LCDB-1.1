@@ -20,7 +20,7 @@ from os import path
 # from io import StringIO
 import logging
 
-from directencoder import DirectEncoder    # local
+from lcdb_function.directencoder import DirectEncoder    # local
 
 
 logger = logging.getLogger('lcdb')
@@ -247,20 +247,32 @@ def get_inner_split(X, y, outer_seed, inner_seed):
                                                                                       
     return X_train, X_valid, X_test, y_train, y_valid, y_test
 
-def get_splits_for_anchor(X, y, anchor, outer_seed, inner_seed, monotonic):
+def get_splits_for_anchor(X, y, anchor, outer_seed, inner_seed, monotonicity):
     if issparse(y):
         y = y.toarray()
     y = np.ravel(y)
-    X_train, X_valid, X_test, y_train, y_valid, y_test = get_inner_split(X, y, outer_seed, inner_seed)
+
+    # check how seeds should be disturbed by monotonicity
+    outer_seed_modifier = 0 if monotonicity in ["anchor", "inner", "outer"] else (1 + inner_seed)  # if we are not monotonic at outer level, use the inner seed to disturb the outer seed
+    inner_seed_modifier = 0 if monotonicity in ["anchor", "inner"] else (1 + anchor)  # if we are not monotonic at inner level, use the anchor to disturb the inner seed
+
+    X_train, X_valid, X_test, y_train, y_valid, y_test = get_inner_split(X, y, outer_seed + outer_seed_modifier, inner_seed + inner_seed_modifier)
+
     if anchor > X_train.shape[0]:
         raise ValueError(f"Invalid anchor {anchor} when available training instances are only {X_train.shape[0]}.")
-    if monotonic:
-        return X_train[:anchor], X_valid, X_test, y_train[:anchor], y_valid, y_test
+    
+    if monotonicity == "anchor":
+        indices = range(anchor)
     else:
         indices = sorted(np.random.RandomState(anchor).choice(range(len(X_train)), anchor, replace=False))
-        print(anchor, len(indices))
-        print(indices)
-        return X_train[indices], X_valid, X_test, y_train[indices], y_valid, y_test
+    return X_train.iloc[indices] if isinstance(X_train, pd.DataFrame) else X_train[indices], X_valid, X_test, y_train[indices], y_valid, y_test
+    #return X_train[:anchor], X_valid, X_test, y_train[:anchor], y_valid, y_test
+    #else:
+        #print("AOFHOSUHOSUGHSOIUHOSDFH")
+        #X_train, X_valid, X_test, y_train, y_valid, y_test = get_inner_split(X, y, outer_seed, inner_seed + anchor)
+        #X_train, X_valid, X_test, y_train, y_valid, y_test = get_inner_split(X, y, outer_seed, inner_seed)
+        
+    
 
 
 def get_truth_and_predictions(
@@ -273,12 +285,12 @@ def get_truth_and_predictions(
         realistic=False,
         fs_realisic=True,
         mixNB=False,
-        monotonic=True,
+        monotonicity="anchor",
         verbose=False
         ):
 
     # create a random split based on the seed
-    X_train, X_valid, X_test, y_train, y_valid, y_test = get_splits_for_anchor(X, y, anchor, outer_seed, inner_seed, monotonic)
+    X_train, X_valid, X_test, y_train, y_valid, y_test = get_splits_for_anchor(X, y, anchor, outer_seed, inner_seed, monotonicity=monotonicity)
 
     # fit the model
     start_time = time.time()
@@ -386,7 +398,7 @@ def get_entry_learner(
         inner_seed,
         realistic,
         fs_realisic,
-        monotonic,
+        monotonicity,
         encoder = DirectEncoder(),
         verbose=False
         ):
@@ -399,7 +411,19 @@ def get_entry_learner(
     (y_train, y_valid, y_test, y_hat_train, y_hat_valid, y_prob_valid, y_hat_test, y_prob_test, 
     known_labels, train_time, predict_time_train, predict_time_valid, 
     predict_proba_time_valid, predict_time_test, predict_proba_time_test
-    ) = get_truth_and_predictions(learner_inst, X, y, anchor, outer_seed, inner_seed, realistic, fs_realisic, monotonic, verbose=verbose)
+    ) = get_truth_and_predictions(
+        learner_inst=learner_inst,
+        X=X,
+        y=y,
+        anchor=anchor,
+        outer_seed=outer_seed,
+        inner_seed=inner_seed,
+        realistic=realistic,
+        fs_realisic=fs_realisic,
+        mixNB=False,
+        monotonicity=monotonicity,
+        verbose=verbose
+        )
     # print("Val accuracy: ",accuracy_score(y_valid , y_hat_valid))
     # print("Test accuracy: ",accuracy_score(y_test , y_hat_test))
     

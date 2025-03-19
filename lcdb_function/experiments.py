@@ -3,7 +3,7 @@ import numpy as np
 from lcdb import get_dataset, get_entry_learner
 import sys, traceback
 
-def run_experiment_on_X_y(X, y,  realistic, fs_realistic, algorithm, outer_seed, inner_seed, anchor, monotonic):
+def run_experiment_on_X_y(X, y, realistic, fs_realistic, algorithm, outer_seed, inner_seed, anchor, monotonicity):
 
     info = {
             "realistic": realistic,
@@ -24,7 +24,7 @@ def run_experiment_on_X_y(X, y,  realistic, fs_realistic, algorithm, outer_seed,
         "SVC_poly": ("sklearn.svm.SVC", {"kernel": "poly", "random_state": SEED}),
         "SVC_rbf": ("sklearn.svm.SVC", {"kernel": "rbf", "random_state": SEED}),
         "SVC_sigmoid": ("sklearn.svm.SVC", {"kernel": "sigmoid", "random_state": SEED}),
-        "lda": ("sklearn.discriminant_analysis.LinearDiscriminantAnalysis", {"random_state": SEED}),
+        "lda": ("sklearn.discriminant_analysis.LinearDiscriminantAnalysis", {}),
         "sklearn.tree.DecisionTreeClassifier": ("sklearn.tree.DecisionTreeClassifier", {"random_state": SEED}),
         "sklearn.tree.ExtraTreeClassifier": ("sklearn.tree.ExtraTreeClassifier", {"random_state": SEED}),
         "sklearn.linear_model.LogisticRegression": ("sklearn.linear_model.LogisticRegression", {"random_state": SEED}),
@@ -64,7 +64,7 @@ def run_experiment_on_X_y(X, y,  realistic, fs_realistic, algorithm, outer_seed,
                 inner_seed=inner_seed,
                 realistic=realistic,
                 fs_realisic=fs_realistic,
-                monotonic=monotonic)
+                monotonicity=monotonicity)
         )
         status = "ok"
     

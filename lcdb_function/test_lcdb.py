@@ -30,7 +30,7 @@ class TestLCDB(TestCase):
 
         # get_splits_for_anchor
         for anchor in [16, 32, 64]:
-            for monotonic in [False, True]:
+            for monotonicity in ["anchor", "inner", "outer", "none"]:
                 for seed in range(5):
                     splits = []
                     for _ in range(2):
@@ -40,7 +40,7 @@ class TestLCDB(TestCase):
                             anchor=anchor,
                             outer_seed=seed,
                             inner_seed=seed,
-                            monotonic=monotonic
+                            monotonicity=monotonicity
                             ))
                     self.assertEqual(str(splits[0]), str(splits[1]))
                     
@@ -53,7 +53,7 @@ class TestLCDB(TestCase):
 
         # get_splits_for_anchor
         for anchor in [16, 32, 64]:
-            for monotonic in [False, True]:
+            for monotonicity in ["anchor", "inner", "outer", "none"]:
                 for seed in range(5):
                     splits = []
                     for _ in range(1, 3):
@@ -63,7 +63,7 @@ class TestLCDB(TestCase):
                             anchor=anchor,
                             outer_seed=seed + _,
                             inner_seed=seed,
-                            monotonic=monotonic
+                            monotonicity=monotonicity
                             ))
                     self.assertNotEqual(str(splits[0]), str(splits[1]))
 
@@ -76,7 +76,7 @@ class TestLCDB(TestCase):
 
         # get_splits_for_anchor
         for anchor in [16, 32, 64]:
-            for monotonic in [False, True]:
+            for monotonicity in ["anchor", "inner", "outer", "none"]:
                 for seed in range(5):
                     splits = []
                     for _ in range(1, 3):
@@ -86,7 +86,7 @@ class TestLCDB(TestCase):
                             anchor=anchor,
                             outer_seed=seed,
                             inner_seed=seed + _,
-                            monotonic=monotonic
+                            monotonicity=monotonicity
                             ))
                     self.assertNotEqual(str(splits[0]), str(splits[1]))
     
@@ -98,7 +98,7 @@ class TestLCDB(TestCase):
 
         # get_splits_for_anchor
         for anchor in [16, 32, 64]:
-            for monotonic in [False, True]:
+            for monotonicity in ["anchor", "inner", "outer", "none"]:
                 for seed in range(5):
                     X_train, X_valid, X_test, y_train, y_valid, y_test = get_splits_for_anchor(
                         X=X,
@@ -106,7 +106,7 @@ class TestLCDB(TestCase):
                         anchor=anchor,
                         outer_seed=seed,
                         inner_seed=seed,
-                        monotonic=monotonic
+                        monotonicity=monotonicity
                         )
                     self.assertEqual(anchor, len(X_train))
 
@@ -117,7 +117,7 @@ class TestLCDB(TestCase):
         X, y = get_dataset(openmlid=openmlid, feature_scaling=True, mix=True)
 
         # get_splits_for_anchor
-        for monotonic in [False, True]:
+        for monotonicity in ["anchor", "inner", "outer", "none"]:
             for seed in range(5):
                 training_sets = []
                 for anchor in [16, 32, 64]:
@@ -127,12 +127,12 @@ class TestLCDB(TestCase):
                         anchor=anchor,
                         outer_seed=seed,
                         inner_seed=seed,
-                        monotonic=monotonic
+                        monotonicity=monotonicity
                         )
                     
                     if training_sets:
                         self.assertEqual(training_sets[-1].shape, X_train[:len(training_sets[-1])].shape)
-                        if monotonic:
+                        if monotonicity == "anchor":
                             self.assertTrue(np.array_equal(training_sets[-1], X_train[:len(training_sets[-1])]))
                         else:
                             self.assertFalse(np.array_equal(training_sets[-1], X_train[:len(training_sets[-1])]))
@@ -149,7 +149,7 @@ class TestLCDB(TestCase):
         for anchor in [16]:
             for realistic in [False]:#, True]:
                 for fs_realistic in [False, True]:
-                    for monotonic in [False, True]:
+                    for monotonicity in ["anchor", "inner", "outer", "none"]:
 
                         entries = []
                         for _ in range(2):
@@ -163,7 +163,7 @@ class TestLCDB(TestCase):
                                 inner_seed=0,
                                 realistic=realistic,
                                 fs_realisic=fs_realistic,
-                                monotonic=monotonic
+                                monotonicity=monotonicity
                             ))
                         for name, v1, v2 in zip(range(8), entries[0], entries[1]):
                             self.assertEqual(str(v1), str(v2), f"Inconsistency in field {name}. First is {v1} but second {v2}")
