@@ -20,7 +20,7 @@ from os import path
 # from io import StringIO
 import logging
 
-from lcdb_function.directencoder import DirectEncoder    # local
+from directencoder import DirectEncoder    # local
 
 
 logger = logging.getLogger('lcdb')
