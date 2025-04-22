@@ -10,6 +10,8 @@ dataset_ids_270 = [3, 6, 11, 12, 13, 14, 15, 16, 18, 21, 22, 23, 24, 26, 28, 29,
 
 anchor_list_denser = np.ceil(16 * 2 ** ((np.arange(137)) / 8)).astype(int)
 
+anchor_list_lcdb10 = np.ceil(16 * 2 ** ((np.arange(35)) / 2)).astype(int)
+
 # import sys
 # sys.path.append("../")
 # from lcdb_function.lcdb import get_dataset
@@ -29,7 +31,7 @@ feature_num_CC18_remove_redundancy = [73, 16, 4, 213, 76, 9, 64, 6, 47, 24, 62, 
 class_num_CC18 = [2, 26, 3, 10, 10, 2, 10, 10, 10, 3, 10, 2, 2, 10, 2, 2, 2, 3, 2, 4, 2, 6, 5, 26, 11, 4, 6, 10, 2, 2, 2, 2, 2, 2, 2, 2, 2, 9, 6, 6, 2, 2, 2, 2, 2, 2, 4, 10, 2, 2, 2, 2, 5, 2, 2, 2, 11, 3, 3, 2, 46, 10, 8, 4, 2, 10, 7, 2, 7, 2, 10, 3]
 
 learner_zoo_full_24 = [ 'SVC_linear', 'SVC_poly', 'SVC_rbf', 'SVC_sigmoid', 'sklearn.tree.DecisionTreeClassifier', 'sklearn.tree.ExtraTreeClassifier', 'sklearn.linear_model.LogisticRegression', 'sklearn.linear_model.PassiveAggressiveClassifier', 'sklearn.linear_model.Perceptron', 'sklearn.linear_model.RidgeClassifier', 'sklearn.linear_model.SGDClassifier', 'sklearn.neural_network.MLPClassifier', 'sklearn.discriminant_analysis.LinearDiscriminantAnalysis', 'sklearn.discriminant_analysis.QuadraticDiscriminantAnalysis', 'sklearn.naive_bayes.BernoulliNB', 'sklearn.naive_bayes.MultinomialNB', 'sklearn.naive_bayes.ComplementNB', 'sklearn.naive_bayes.GaussianNB', 'sklearn.neighbors.KNeighborsClassifier', 'sklearn.neighbors.NearestCentroid', 'sklearn.ensemble.ExtraTreesClassifier', 'sklearn.ensemble.RandomForestClassifier', 'sklearn.ensemble.GradientBoostingClassifier', 'sklearn.dummy.DummyClassifier' ]
-learner_zoo = [ 'SVC_linear', 'SVC_poly', 'SVC_rbf', 'SVC_sigmoid', 'Decision Trees', 'ExtraTrees','LogisticRegression', 'PassiveAggressive', 'Perceptron', 'RidgeClassifier', 'SGDClassifier', 'MLP', 'LDA', 'QDA', 'BernoulliNB', 'MultinomialNB', 'ComplementNB', 'GaussianNB','KNN', 'NearestCentroid', 'ens.ExtraTrees', 'ens.RandomForest', 'ens.GradientBoosting','DummyClassifier']
+learner_zoo = [ 'SVC_linear', 'SVC_poly', 'SVC_rbf', 'SVC_sigmoid', 'Decision Tree', 'ExtraTree','LogisticRegression', 'PassiveAggressive', 'Perceptron', 'RidgeClassifier', 'SGDClassifier', 'MLP', 'LDA', 'QDA', 'BernoulliNB', 'MultinomialNB', 'ComplementNB', 'GaussianNB','KNN', 'NearestCentroid', 'ens.ExtraTrees', 'ens.RandomForest', 'ens.GradientBoosting','DummyClassifier']
 learner_zoo_abbreviation = [ 'SVC Linear', 'SVC Poly', 'SVC RBF', 'SVC Sigmoid', 'DT', 'ET','LR', 'PA', 'Perceptron', 'Ridge', 'SGD', 'MLP', 'LDA', 'QDA', 'BernoulliNB', 'MultinomialNB', 'ComplementNB', 'GaussianNB','KNN', 'NC', 'ens.ET', 'ens.RF', 'ens.GB','Dummy']
 
 learner_zoo_full_mixNB = [ "mixBernoulliNB", "mixGaussianNB", "mixMultinomialNB", "mixComplementNB"]
