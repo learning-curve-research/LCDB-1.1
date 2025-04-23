@@ -757,9 +757,9 @@ def peaking_detection(input_dataset, flat_filter = False, bonferroni = True):
             # p_value of mono: h,i
             _, p_value_mono = stats.ttest_rel(group_values_i, group_values_h, alternative='greater')
 
-            if bonferroni: 
-                p_value_convex = p_value_convex * len(triple_indices)
-                p_value_mono = p_value_mono * len(pair_indices)
+            if bonferroni: ############## BONFERRONI should be the sum of all testing
+                p_value_convex = p_value_convex * ( len(triple_indices) + len(pair_indices) )
+                p_value_mono = p_value_mono * ( len(triple_indices) + len(pair_indices) )
             else: 
                 pass
 
