@@ -3,9 +3,31 @@ import scipy
 import scipy.stats as stats
 from sklearn.metrics import mean_squared_error
 from tqdm import tqdm
+from pathlib import Path
+import h5py
+from meta_feature import anchor_list_denser, learner_zoo
+
 # from scipy.stats import t
 
-anchor_list_denser = np.ceil(16 * 2 ** ((np.arange(137)) / 8)).astype(int)
+def get_datasets_and_learner_zoo_for_excluded_learners(excluded_learners):
+
+    # check that excluded learners are contained in the zoo
+    for el in excluded_learners:
+        if el not in learner_zoo:
+            raise ValueError(f"invalid learner name {el}")
+
+    # load datasets only of the included learners
+    file_paths = [  Path.cwd() / '../dataset/LCDB11_ER_CC18_noFS_raw.hdf5',
+                    Path.cwd() / '../dataset/LCDB11_ER_CC18_minmaxFS_raw.hdf5',
+                    Path.cwd() / '../dataset/LCDB11_ER_CC18_standardFS_raw.hdf5']
+    dataset_nofs, dataset_minmaxfs, dataset_standardfs = [
+        h5py.File(fp, 'r')['error_rate'][:, [i for i, n in enumerate(learner_zoo) if n not in excluded_learners]]
+        for fp in file_paths
+    ]
+
+    # reduce the learner zoo to the included ones
+    _learner_zoo = [l for l in learner_zoo if l not in excluded_learners]
+    return _learner_zoo, dataset_nofs, dataset_minmaxfs, dataset_standardfs
 
 
 def paired_greater_ttest_pvalue(values_greater, values_smaller):
@@ -1032,3 +1054,35 @@ def curves_models_fitting(lc_data, model_names, extrapolate, mask_anchor_number,
                 print(f"Failed to fit model {model_name} for current learning curve. Error: {e}")
         
     return fitting_results
+
+def successive_halving(learning_curves, budget, budget_increase, dropout_rate, active_mask=None, _history={}):
+    
+    # only on first call, activate all algorithms
+    if active_mask is None:
+        active_mask = np.ones(len(learning_curves))
+    
+    # append the current ensemble
+    indices_of_active_algorithms = [int(i) for i in np.where(active_mask)[0]]
+    _history[budget] = indices_of_active_algorithms
+    
+    # recursive cancellation
+    current_population_size = len(indices_of_active_algorithms)
+    if current_population_size <= 1 or budget >= learning_curves.shape[1]:
+        return _history
+    
+    # determine currently best
+    new_population_size = max(1, (current_population_size - dropout_rate) if dropout_rate >= 1 else int(np.round(current_population_size * (1 - dropout_rate))))
+    sorted_performances = np.argsort(learning_curves[:, budget])
+    print(sorted_performances)
+    survivors = [int(i) for i in sorted_performances if i in indices_of_active_algorithms][:new_population_size]
+    new_active_mask = np.array([i in survivors for i in range(len(learning_curves))])
+    
+    # recurse
+    return successive_halving(
+        learning_curves=learning_curves,
+        budget=budget + budget_increase,
+        budget_increase=budget_increase,
+        dropout_rate=dropout_rate,
+        active_mask=new_active_mask,
+        _history=_history
+    )
