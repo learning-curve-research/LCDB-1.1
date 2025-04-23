@@ -10,40 +10,49 @@ from directencoder import DirectEncoder
 from analysis.meta_feature import dataset_ids_CC18, dataset_ids_FULL, anchor_list_denser, learner_zoo_full_24, learner_zoo_full_mixNB
 
 
-# ==================== Manual selection of metric ====================
-# ====================================================================
+# ======================== Manual Settings ========================
 # dataset list
-dataset_ids = dataset_ids_CC18
-
-# anchor definition
-anchor_list = anchor_list_denser
+dataset_ids = dataset_ids_FULL  #dataset_ids_CC18
 
 # extracted learner list
 learner_zoo = learner_zoo_full_24
 
 # results folder index
-start_index, end_index = 0, 14
+start_index, end_index = 7, 10
 
 # metric for extracting
-metric = 'error rate'   # 'l1', 'log-loss', 'AUC'
+metric = 'error rate'   # 'l1', 'log-loss', 'AUC', 'error rate'
 
 # retrieval folder path
-# input_path = '/lcdb11_raw/experiments_CC18_24_nofs_minmax/'
-input_path = '/lcdb11/experiments_CC18_24_standard/'
-print('Extracting from the path: ',Path(input_path))
+input_path = '/lcdb11_raw/experiments_198_24_standard/'     # jobs 1-29
+# input_path = '/lcdb11_raw/experiments_198_mixNB_nofs_minmax/'     # jobs 1-4
+# input_path = '/lcdb11_raw/experiments_270_mixNB_standard/'        # jobs 1-3
+# input_path = '/lcdb11_raw/experiments_CC18_24_nofs_minmax/'         # jobs 1-12
+input_path = '/lcdb11/experiments_198_24_nofs_minmax/'          # jobs 1-117
+# input_path = '/lcdb11/experiments_CC18_24_standard/'        # jobs 1-10
+# input_path = '/lcdb11/experiments_CC18_mixNB_nofs_minmax/'    # jobs 1-3
 
 # database file name
-output_filename = "LCDB11_ER_CC18_standard.hdf5"
+output_filename = "LCDB11_ER_265_nofs_minmax_198_1.3.hdf5"
+
+
+# ======================== Settings ========================
+print(f'Extracting from the path: {Path(input_path)}')
 
 # min-max: 1, standardization: 2
-hardcode_fs_channel = 2
-# ====================================================================
-# ====================================================================
+if 'minmax' in input_path.lower():
+    hardcode_fs_channel = 1
+elif 'standard' in input_path.lower():
+    hardcode_fs_channel = 2
+else:
+    print("Error: Could not detect feature scaling type from input_path. Expected 'minmax' or 'standard'.")
+    sys.exit(1)
 
 # database setting: (dataset, learner, outer seed, inner seed, curve, train-val-test, feature scaling, clean-raw)
 results_array = np.full((len(dataset_ids), len(learner_zoo), 5, 5, 137, 3, 3, 2), np.nan)  
 
 
+# ======================== Metrics ========================
 def get_acc_from_json(json_obj):
     myEncoder = DirectEncoder()
     y_train = myEncoder.decode_label_vector_decompression(json_obj['y_train'])
@@ -60,19 +69,16 @@ def get_acc_from_json(json_obj):
 
 def get_auc_from_json(json_obj):
     myEncoder = DirectEncoder()
-    y_train = myEncoder.decode_label_vector_decompression(json_obj['y_train'])
     y_valid = myEncoder.decode_label_vector_decompression(json_obj['y_valid'])
     y_test = myEncoder.decode_label_vector_decompression(json_obj['y_test'])
 
-    y_hat_proba_train = myEncoder.decode_distribution_decompress(json_obj['y_hat_proba_train'])
-    y_hat_proba_valid = myEncoder.decode_distribution_decompress(json_obj['y_hat_proba_valid'])
-    y_hat_proba_test = myEncoder.decode_distribution_decompress(json_obj['y_hat_proba_test'])
+    y_hat_proba_valid = myEncoder.decode_distribution_decompress(json_obj['predictproba_valid_compressed'])
+    y_hat_proba_test = myEncoder.decode_distribution_decompress(json_obj['predictproba_test_compressed'])
 
-    auc_train = roc_auc_score(y_train, y_hat_proba_train, multi_class='ovr', average='weighted')
     auc_valid = roc_auc_score(y_valid, y_hat_proba_valid, multi_class='ovr', average='weighted')
     auc_test = roc_auc_score(y_test, y_hat_proba_test, multi_class='ovr', average='weighted')
 
-    return auc_train, auc_valid, auc_test
+    return auc_valid, auc_test
 
 
 def get_f1_from_json(json_obj):
@@ -93,21 +99,19 @@ def get_f1_from_json(json_obj):
 
 def get_logloss_from_json(json_obj):
     myEncoder = DirectEncoder()
-    y_train = myEncoder.decode_label_vector_decompression(json_obj['y_train'])
     y_valid = myEncoder.decode_label_vector_decompression(json_obj['y_valid'])
     y_test = myEncoder.decode_label_vector_decompression(json_obj['y_test'])
 
-    y_hat_proba_train = myEncoder.decode_distribution_decompress(json_obj['y_hat_proba_train'])
-    y_hat_proba_valid = myEncoder.decode_distribution_decompress(json_obj['y_hat_proba_valid'])
-    y_hat_proba_test = myEncoder.decode_distribution_decompress(json_obj['y_hat_proba_test'])
+    y_hat_proba_valid = myEncoder.decode_distribution_decompress(json_obj['predictproba_valid_compressed'])
+    y_hat_proba_test = myEncoder.decode_distribution_decompress(json_obj['predictproba_test_compressed'])
 
-    logloss_train = log_loss(y_train, y_hat_proba_train, labels=np.unique(y_train))
     logloss_valid = log_loss(y_valid, y_hat_proba_valid, labels=np.unique(y_valid))
     logloss_test = log_loss(y_test, y_hat_proba_test, labels=np.unique(y_test))
 
-    return logloss_train, logloss_valid, logloss_test
+    return logloss_valid, logloss_test
 
 
+# ======================== Run ========================
 for i in range(start_index, end_index):
     print(f"Extracting results from folder: {i}")
     for j in tqdm(range(1000)):
@@ -124,7 +128,7 @@ for i in range(start_index, end_index):
                             # encode into the index of dataset_ids list
                             idx_dataset = np.digitize(json_obj['openmlid'], dataset_ids) - 1
                             # anchor index
-                            idx_anchor = np.digitize(json_obj['size_train'], anchor_list) - 1
+                            idx_anchor = np.digitize(json_obj['size_train'], anchor_list_denser) - 1
                             # learner index
                             idx_learner = learner_zoo.index(json_obj['learner'])
                             # outer and inner seed
@@ -140,15 +144,17 @@ for i in range(start_index, end_index):
                                 # Invert accuracy to error rate
                                 score_train, score_valid, score_test = 1 - score_train, 1 - score_valid, 1 - score_test
                             elif metric == 'AUC':
-                                score_train, score_valid, score_test = get_auc_from_json(json_obj)
+                                score_train = np.nan
+                                score_valid, score_test = get_auc_from_json(json_obj)
                             elif metric == 'F1':
                                 score_train, score_valid, score_test = get_f1_from_json(json_obj)
                             elif metric == 'log-loss':
-                                score_train, score_valid, score_test = get_logloss_from_json(json_obj)
+                                score_train = np.nan
+                                score_valid, score_test = get_logloss_from_json(json_obj)
                             else:
                                 raise ValueError(f"Unknown metric: {metric}")
-                            acc_train, acc_valid, acc_test = get_acc_from_json(json_obj)
 
+                            # store the metrics that are successfully executed
                             results_array[idx_dataset, idx_learner, outer, inner, idx_anchor, :, fs_channel, raw_clean_channel] = [score_train, score_valid, score_test]
                         
                         except Exception as e:
@@ -165,7 +171,7 @@ with h5py.File(output_filename, 'w') as f:
     print(f"Saving metric: {metric}")
     f.create_dataset(metric, data=results_array)
     # meta-data
-    f.create_dataset('anchor list', data=np.array(anchor_list))
+    f.create_dataset('anchor list', data=np.array(anchor_list_denser))
     f.create_dataset('dataset ids', data=np.array(dataset_ids))
     f.create_dataset('learner zoo', data=np.string_(learner_zoo))
 print(f"{output_filename} successfully saved")
