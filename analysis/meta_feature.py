@@ -34,4 +34,4 @@ learner_zoo_full_24 = [ 'SVC_linear', 'SVC_poly', 'SVC_rbf', 'SVC_sigmoid', 'skl
 learner_zoo = [ 'SVM_Linear', 'SVM_Poly', 'SVM_RBF', 'SVM_Sigmoid', 'Decision Tree', 'ExtraTree','LogisticRegression', 'PassiveAggressive', 'Perceptron', 'RidgeClassifier', 'SGDClassifier', 'MLP', 'LDA', 'QDA', 'BernoulliNB', 'MultinomialNB', 'ComplementNB', 'GaussianNB','KNN', 'NearestCentroid', 'ens.ExtraTrees', 'ens.RandomForest', 'ens.GradientBoosting','DummyClassifier']
 learner_zoo_abbreviation = [ 'SVM_Linear', 'SVM_Poly', 'SVM_RBF', 'SVM_Sigmoid', 'DT', 'ET','LR', 'PA', 'Perceptron', 'Ridge', 'SGD', 'MLP', 'LDA', 'QDA', 'BernoulliNB', 'MultinomialNB', 'ComplementNB', 'GaussianNB','KNN', 'NC', 'ens.ET', 'ens.RF', 'ens.GB','Dummy']
 
-learner_zoo_mixNB = [ "mixBernoulliNB", "mixGaussianNB", "mixMultinomialNB", "mixComplementNB"]
+learner_zoo_mixNB = [ "mixBernoulliNB", "mixMultinomialNB", "mixComplementNB", "mixGaussianNB"]
