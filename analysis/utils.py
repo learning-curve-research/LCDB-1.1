@@ -64,7 +64,9 @@ def global_monotonicity_violation_holm(input_dataset, flat_filter = True, dippin
     '''
 
     # input dataset in (72/265, 24, 5, 5, 137, 3)    
-    group_lc = input_dataset.reshape(-1,24,25,137,3)
+    num_learner = input_dataset.shape[1] 
+    num_anchor = input_dataset.shape[4]
+    group_lc = input_dataset.reshape(-1,num_learner,25,num_anchor,3)
     group_lc_valid = group_lc[:,:,:,:,1]
     group_lc_valid = np.transpose(group_lc_valid, (1, 0, 2, 3)) # (24,72/265,25,137)
 
@@ -175,7 +177,9 @@ def global_monotonicity_violation_holm(input_dataset, flat_filter = True, dippin
 def global_convexity_violation_holm(input_dataset, flat_filter = True): 
     
     # input dataset in (72/265, 24, 5, 5, 137, 3)    
-    group_lc = input_dataset.reshape(-1,24,25,137,3)
+    num_learner = input_dataset.shape[1] 
+    num_anchor = input_dataset.shape[4]
+    group_lc = input_dataset.reshape(-1,num_learner,25,num_anchor,3)
     group_lc_valid = group_lc[:,:,:,:,1]
     group_lc_valid = np.transpose(group_lc_valid, (1, 0, 2, 3)) # (24,72/265,25,137)
 
@@ -309,7 +313,7 @@ def straight_det_mono(error_matrix_y, error_matrix_x, input_dataset, threshold =
     return error_matrix_y, error_matrix_x
 
 
-def global_monotonicity_violation(input_dataset, flat_filter = False, bonferroni = True, dipping = False): 
+def global_monotonicity_violation(input_dataset, flat_filter = False, bonferroni = True, dipping = False, anchor_list = anchor_list_denser): 
     # missing learning curves:        NaN
     # flat learning curves:           -1
     # no significant violation:       0
@@ -322,7 +326,9 @@ def global_monotonicity_violation(input_dataset, flat_filter = False, bonferroni
     '''
     
     # input dataset in (72/265, 24, 5, 5, 137, 3)    
-    group_lc = input_dataset.reshape(-1,24,25,137,3)
+    num_learner = input_dataset.shape[1]
+    num_anchor = input_dataset.shape[4]
+    group_lc = input_dataset.reshape(-1,num_learner,25,num_anchor,3)
     group_lc_valid = group_lc[:,:,:,:,1]
     group_lc_valid = np.transpose(group_lc_valid, (1, 0, 2, 3)) # (24,72/265,25,137)
 
@@ -356,7 +362,7 @@ def global_monotonicity_violation(input_dataset, flat_filter = False, bonferroni
             mask_indices = ~np.isnan(mean_curve)
             curves_group_clean = curves_group[:, mask_indices]
             mean_curve_clean = mean_curve[mask_indices]   
-            anchor_list_clean = anchor_list_denser[mask_indices]
+            anchor_list_clean = anchor_list[mask_indices]
 
             if len(mean_curve_clean) < 2:
                 error_matrix_y[learner_idx, dataset_idx] = 0
@@ -428,98 +434,13 @@ def global_monotonicity_violation(input_dataset, flat_filter = False, bonferroni
     return error_matrix_y, error_matrix_x
 
 
-# def local_mono_violation(learner_idx, dataset_idx, input_dataset, threshold_anchor = 0):    # anchor 0(16), 16(64), 32(256)
-#     # input dataset in (72/265, 24, 5, 5, 137, 3)    
-#     group_lc = input_dataset.reshape(-1,24,25,137,3)
-#     group_lc_valid = group_lc[:,:,:,:,1]
-#     group_lc_valid = np.transpose(group_lc_valid, (1, 0, 2, 3)) # (24,72/265,25,137)
-#     curves_group = group_lc_valid[learner_idx, dataset_idx, :, :]
 
-#     curves_group = curves_group[:, threshold_anchor:]
-#     mean_curve = np.nanmean(curves_group, axis=0)
-
-#     # remove nan in curve & align with anchor index
-#     mask_indices = ~np.isnan(mean_curve)
-#     curves_group_clean = curves_group[:, mask_indices]
-#     mean_curve_clean = mean_curve[mask_indices]   
-#     anchor_list_clean = anchor_list_denser[threshold_anchor:][mask_indices]
-
-#     if len(mean_curve_clean) < 2:
-#         print(f"Not a curve in learner {learner_idx} dataset {dataset_idx}")
-#         anchor_list_clean = anchor_list_denser  # wrong but for no error
-#         mono_viola_Y = []  
-#         mono_viola_X = []     
-#         mono_viola_anchor = []
-#     else:
-#         max_value = np.max(mean_curve_clean)
-#         min_value = np.min(mean_curve_clean)
-
-#         # t-test neighbour anchor
-#         num_points = len(mean_curve_clean)
-#         monotonicity_checks = []
-
-#         for i in range(num_points - 1):
-#             group_values_i = curves_group_clean[:, i]    
-#             group_values_j = curves_group_clean[:, i+1]  
-#             # stats can return nan, 0, and 1 randomly
-#             if np.array_equal(np.round(group_values_i, decimals=7), np.round(group_values_j, decimals=7)):  
-#                 p_value = 1.0
-#             else:
-#                 t_stat, p_value = stats.ttest_rel(group_values_i, group_values_j, alternative='less')
-#             bonferroni_p_value = p_value * (num_points - 1)
-
-#             if bonferroni_p_value < 0.05: # and mean_curve_clean[i] < mean_curve_clean[i+1]:
-#                 monotonicity_checks.append(True)
-#             else:
-#                 monotonicity_checks.append(False)
-
-#         # merge the consecutive anchor into a segment
-#         segments = []
-#         current_segment = []
-#         for idx, check in enumerate(monotonicity_checks):
-#             if check:  # significant
-#                 if not current_segment:
-#                     current_segment.append(idx)  # start new segment
-#                 current_segment.append(idx + 1)  # extent current segment
-#             else:
-#                 if current_segment:
-#                     segments.append(current_segment)  # append segment
-#                     current_segment = []  # empty current segment
-
-#         # append last segment
-#         if current_segment:
-#             segments.append(current_segment)
-
-#         # no mono violation
-#         if len(segments) == 0:
-#             mono_viola_Y = []  
-#             mono_viola_X = []     
-#             mono_viola_anchor = []
-#         else: 
-#             mono_viola_Y = []  
-#             mono_viola_X = []     
-#             mono_viola_anchor = []
-#             # monotonicity_error_Y and non_mono_length
-#             for segment in segments:
-#                 i_index = segment[0]
-#                 j_index = segment[-1]
-
-#                 monotonicity_error_Y = (mean_curve_clean[j_index] - mean_curve_clean[i_index]) / (max_value - min_value)
-#                 non_mono_length_X = (anchor_list_clean[j_index] - anchor_list_clean[i_index]) / (anchor_list_clean[-1]-anchor_list_clean[0])
-
-#                 mono_viola_Y.append(monotonicity_error_Y)
-#                 mono_viola_X.append(non_mono_length_X)
-
-#                 real_num_data = [anchor_list_clean[i_index], anchor_list_clean[j_index]]
-#                 mono_viola_anchor.append(real_num_data)
-#     return mono_viola_anchor, anchor_list_clean, mono_viola_Y, mono_viola_X
-
-
-
-def global_convexity_violation(input_dataset, flat_filter = False, bonferroni = True): 
+def global_convexity_violation(input_dataset, flat_filter = False, bonferroni = True, anchor_list = anchor_list_denser): 
     
-    # input dataset in (72/265, 24, 5, 5, 137, 3)    
-    group_lc = input_dataset.reshape(-1,24,25,137,3)
+    # input dataset in (72/265, 24, 5, 5, 137, 3)   
+    num_learner = input_dataset.shape[1] 
+    num_anchor = input_dataset.shape[4]
+    group_lc = input_dataset.reshape(-1,num_learner,25,num_anchor,3)
     group_lc_valid = group_lc[:,:,:,:,1]
     group_lc_valid = np.transpose(group_lc_valid, (1, 0, 2, 3)) # (24,72/265,25,137)
 
@@ -555,7 +476,7 @@ def global_convexity_violation(input_dataset, flat_filter = False, bonferroni = 
             mask_indices = ~np.isnan(mean_curve)
             curves_group_clean = curves_group[:, mask_indices]
             mean_curve_clean = mean_curve[mask_indices]   
-            anchor_list_clean = anchor_list_denser[mask_indices]
+            anchor_list_clean = anchor_list[mask_indices]
 
             if len(mean_curve_clean) < 3:
                 error_matrix[learner_idx, dataset_idx] = 0
@@ -645,10 +566,12 @@ def global_convexity_violation(input_dataset, flat_filter = False, bonferroni = 
     return error_matrix, index_h_matrix, index_i_matrix, index_j_matrix
 
 
-def peaking_detection(input_dataset, flat_filter = False, bonferroni = True): 
+def peaking_detection(input_dataset, flat_filter = False, bonferroni = True, anchor_list = anchor_list_denser): 
    
     # input dataset in (72/265, 24, 5, 5, 137, 3)    
-    group_lc = input_dataset.reshape(-1,24,25,137,3)
+    num_learner = input_dataset.shape[1] 
+    num_anchor = input_dataset.shape[4]
+    group_lc = input_dataset.reshape(-1,num_learner,25,num_anchor,3)
     group_lc_valid = group_lc[:,:,:,:,1]
     group_lc_valid = np.transpose(group_lc_valid, (1, 0, 2, 3)) # (24,72/265,25,137)
 
@@ -684,7 +607,7 @@ def peaking_detection(input_dataset, flat_filter = False, bonferroni = True):
             mask_indices = ~np.isnan(mean_curve)
             curves_group_clean = curves_group[:, mask_indices]
             mean_curve_clean = mean_curve[mask_indices]   
-            anchor_list_clean = anchor_list_denser[mask_indices]
+            anchor_list_clean = anchor_list[mask_indices]
 
             if len(mean_curve_clean) < 3:
                 error_matrix[learner_idx, dataset_idx] = 0
@@ -780,9 +703,11 @@ def peaking_detection(input_dataset, flat_filter = False, bonferroni = True):
     return error_matrix, index_h_matrix, index_i_matrix, index_j_matrix
 
 
-def identify_local_mono(learner_idx, dataset_idx, input_dataset, threshold_anchor = 0):    # anchor 0(16), 16(64), 32(256)
+def identify_local_mono(learner_idx, dataset_idx, input_dataset, threshold_anchor = 0, anchor_list = anchor_list_denser):    # anchor 0(16), 16(64), 32(256)
     # input dataset in (72/265, 24, 5, 5, 137, 3)    
-    group_lc = input_dataset.reshape(-1,24,25,137,3)
+    num_learner = input_dataset.shape[1] 
+    num_anchor = input_dataset.shape[4]
+    group_lc = input_dataset.reshape(-1,num_learner,25,num_anchor,3)
     group_lc_valid = group_lc[:,:,:,:,1]
     group_lc_valid = np.transpose(group_lc_valid, (1, 0, 2, 3)) # (24,72/265,25,137)
     curves_group = group_lc_valid[learner_idx, dataset_idx, :, :]
@@ -794,7 +719,7 @@ def identify_local_mono(learner_idx, dataset_idx, input_dataset, threshold_ancho
     mask_indices = ~np.isnan(mean_curve)
     curves_group_clean = curves_group[:, mask_indices]
     mean_curve_clean = mean_curve[mask_indices]   
-    anchor_list_clean = anchor_list_denser[threshold_anchor:][mask_indices]
+    anchor_list_clean = anchor_list[threshold_anchor:][mask_indices]
 
     number_peaks = 0
     if len(mean_curve_clean) < 2:
