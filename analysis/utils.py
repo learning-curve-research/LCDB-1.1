@@ -5,7 +5,7 @@ from sklearn.metrics import mean_squared_error
 from tqdm import tqdm
 from pathlib import Path
 import h5py
-from meta_feature import anchor_list_denser, learner_zoo
+from meta_feature import anchor_list_denser, learner_zoo, learner_zoo_abbreviation
 
 # from scipy.stats import t
 
@@ -26,8 +26,8 @@ def get_datasets_and_learner_zoo_for_excluded_learners(excluded_learners):
     ]
 
     # reduce the learner zoo to the included ones
-    _learner_zoo = [l for l in learner_zoo if l not in excluded_learners]
-    return _learner_zoo, dataset_nofs, dataset_minmaxfs, dataset_standardfs
+    _learner_zoo = [(l_long, l_short) for l_long, l_short in zip(learner_zoo, learner_zoo_abbreviation) if l_long not in excluded_learners]
+    return [l[0] for l in _learner_zoo], [l[1] for l in _learner_zoo], dataset_nofs, dataset_minmaxfs, dataset_standardfs
 
 
 def paired_greater_ttest_pvalue(values_greater, values_smaller):
