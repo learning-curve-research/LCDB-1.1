@@ -17,14 +17,10 @@ def get_datasets_and_learner_zoo_for_excluded_learners(excluded_learners):
             raise ValueError(f"invalid learner name {el}")
 
     # load datasets only of the included learners
-    file_paths = [  Path.cwd() / '../dataset/LCDB11_ER_CC18_noFS_raw.hdf5',
-                    Path.cwd() / '../dataset/LCDB11_ER_CC18_minmaxFS_raw.hdf5',
-                    Path.cwd() / '../dataset/LCDB11_ER_CC18_standardFS_raw.hdf5']
-    dataset_nofs, dataset_minmaxfs, dataset_standardfs = [
-        h5py.File(fp, 'r')['error_rate'][:, [i for i, n in enumerate(learner_zoo) if n not in excluded_learners]]
-        for fp in file_paths
-    ]
-
+    file_paths = Path.cwd() / '../dataset/LCDB11_ER_CC18_24.hdf5'
+    dataset = h5py.File(file_paths , 'r')['error rate'][:, [i for i, n in enumerate(learner_zoo) if n not in excluded_learners]]
+    # dataset_nofs, dataset_minmaxfs, dataset_standardfs 
+    dataset_nofs, dataset_minmaxfs, dataset_standardfs = [dataset[..., 0, 0], dataset[..., 1, 0], dataset[..., 2, 0]]
     # reduce the learner zoo to the included ones
     _learner_zoo = [(l_long, l_short) for l_long, l_short in zip(learner_zoo, learner_zoo_abbreviation) if l_long not in excluded_learners]
     return [l[0] for l in _learner_zoo], [l[1] for l in _learner_zoo], dataset_nofs, dataset_minmaxfs, dataset_standardfs
@@ -55,240 +51,13 @@ def paired_greater_ttest_pvalue(values_greater, values_smaller):
     return p_value
 
 
-def global_monotonicity_violation_holm(input_dataset, flat_filter = True, dipping = False): 
-    '''
-    missing learning curves:        NaN
-    flat learning curves:           -1
-    no significant violation:       0
-    significant violation error:    0-1
-    '''
-
-    # input dataset in (72/265, 24, 5, 5, 137, 3)    
-    num_learner = input_dataset.shape[1] 
-    num_anchor = input_dataset.shape[4]
-    group_lc = input_dataset.reshape(-1,num_learner,25,num_anchor,3)
-    group_lc_valid = group_lc[:,:,:,:,1]
-    group_lc_valid = np.transpose(group_lc_valid, (1, 0, 2, 3)) # (24,72/265,25,137)
-
-    # output matrix in #(24,72/265)
+def flat_detector(input_dataset, threshold = 0.05):
+    # dataset in (72, 24, 5, 5, 137, 3)
+    # error array in (24, 72) 
     output_shape = (input_dataset.shape[1], input_dataset.shape[0]) 
     error_matrix_y = np.full(output_shape, np.nan)  
     error_matrix_x = np.full(output_shape, np.nan)
-
-    # loop
-    for dataset_idx in tqdm(range(group_lc_valid.shape[1])):
-        for learner_idx in range(group_lc_valid.shape[0]): 
-            if flat_filter:     # check flatness
-                mean_onedataset_valid = np.nanmean(group_lc_valid[:, dataset_idx, :, :], axis = 1)
-                minmax_diff = np.nanmax(mean_onedataset_valid) - np.nanmin(mean_onedataset_valid)
-                learner_minmax_diff = np.nanmax(mean_onedataset_valid[learner_idx, :]) - np.nanmin(mean_onedataset_valid[learner_idx, :])
-
-                if np.isnan(learner_minmax_diff):
-                    continue
-                elif learner_minmax_diff > (minmax_diff * 0.05):
-                    pass
-                else: 
-                    error_matrix_y[learner_idx, dataset_idx] = -1
-                    error_matrix_x[learner_idx, dataset_idx] = -1
-                    continue
-
-            # else mean curve
-            curves_group = group_lc_valid[learner_idx, dataset_idx, :, :]
-            mean_curve = np.nanmean(curves_group, axis=0)
-
-            mask_indices = ~np.isnan(mean_curve)
-            curves_group_clean = curves_group[:, mask_indices]
-            mean_curve_clean = mean_curve[mask_indices]
-            anchor_list_clean = anchor_list_denser[mask_indices]
-
-            if len(mean_curve_clean) < 2:
-                error_matrix_y[learner_idx, dataset_idx] = 0
-                error_matrix_x[learner_idx, dataset_idx] = 0
-                continue
-
-            num_points = len(mean_curve_clean)
-            if dipping:
-                j = num_points - 1
-                pair_indices = [(i, j) for i in range(num_points - 1)]
-            else: 
-                pair_indices = [(i, j) for i in range(num_points - 1) for j in range(i + 1, num_points)]
-
-            p_values = []
-            pair_results = []
-
-            # loop all i,j
-            for (i, j) in pair_indices:
-                group_values_i = curves_group_clean[:, i]
-                group_values_j = curves_group_clean[:, j]
-
-                # remove NaN from both arrays simultaneously to ensure equal length, 
-                # and the anchor with only one estimation is removed  (nonzero for True and False list)
-                valid_mask = ~np.isnan(group_values_i) & ~np.isnan(group_values_j)
-                
-                group_values_i = group_values_i[valid_mask]
-                group_values_j = group_values_j[valid_mask]
-
-                if len(group_values_i) < 2 or len(group_values_j) < 2:
-                    p_value = 1     # only one estimation
-                elif np.mean(group_values_i) > np.mean(group_values_j):
-                    p_value = 1     # save compute time
-                else: 
-                    #  paired t-test (one-sided, alternative hypothesis: mean of i > mean of j)
-                    p_value = paired_greater_ttest_pvalue(group_values_j, group_values_i)
-                p_values.append(p_value)
-                pair_results.append((i, j, p_value))
-
-            # sort p value
-            sorted_indices = np.argsort(p_values)  # small to large
-            sorted_p_values = np.array(p_values)[sorted_indices]
-
-            #  Holm-adjusted p-values
-            adjusted_p_values = np.zeros_like(sorted_p_values)
-            for rank, p_value in enumerate(sorted_p_values, start=1):
-                adjusted_p_values[rank - 1] = p_value * (len(pair_indices) - rank + 1)
-
-            adjusted_p_values = np.minimum(adjusted_p_values, 1.0)  # p_value smaller than 1
-
-            # all significant indices (order in original p value)
-            significant_indices = sorted_indices[adjusted_p_values <= 0.05]
-            if len(significant_indices) > 0:
-                # more significant one of original p-value
-                i_index, j_index, p_value = pair_results[significant_indices[0]]
-
-                # Y and X (NO MORE NORMALIZATION)
-                monotonicity_error_Y = (mean_curve_clean[j_index] - mean_curve_clean[i_index]) 
-
-                # use ∆ | data | to mitigate occasional fluctuations
-                num_data_diff = anchor_list_clean[j_index] - anchor_list_clean[i_index]
-                all_num_data = anchor_list_clean[-1] - anchor_list_clean[0]
-                non_mono_length = num_data_diff / all_num_data
-
-                error_matrix_y[learner_idx, dataset_idx] = monotonicity_error_Y
-                error_matrix_x[learner_idx, dataset_idx] = non_mono_length
-
-            else:
-                error_matrix_y[learner_idx, dataset_idx] = 0
-                error_matrix_x[learner_idx, dataset_idx] = 0
-
-            
-    return error_matrix_y, error_matrix_x
-
-
-def global_convexity_violation_holm(input_dataset, flat_filter = True): 
     
-    # input dataset in (72/265, 24, 5, 5, 137, 3)    
-    num_learner = input_dataset.shape[1] 
-    num_anchor = input_dataset.shape[4]
-    group_lc = input_dataset.reshape(-1,num_learner,25,num_anchor,3)
-    group_lc_valid = group_lc[:,:,:,:,1]
-    group_lc_valid = np.transpose(group_lc_valid, (1, 0, 2, 3)) # (24,72/265,25,137)
-
-    # output matrix in #(24,72/265)
-    output_shape = (input_dataset.shape[1], input_dataset.shape[0]) 
-    error_matrix, index_h_matrix, index_i_matrix, index_j_matrix = (np.full(output_shape, np.nan) for _ in range(4))
-
-
-    # loop
-    for dataset_idx in tqdm(range(group_lc_valid.shape[1])):
-        for learner_idx in range(group_lc_valid.shape[0]): 
-            if flat_filter:     # check flatness
-                mean_onedataset_valid = np.nanmean(group_lc_valid[:, dataset_idx, :, :], axis = 1)
-                minmax_diff = np.nanmax(mean_onedataset_valid) - np.nanmin(mean_onedataset_valid)
-                learner_minmax_diff = np.nanmax(mean_onedataset_valid[learner_idx, :]) - np.nanmin(mean_onedataset_valid[learner_idx, :])
-
-                if np.isnan(learner_minmax_diff):
-                    continue
-                elif learner_minmax_diff > (minmax_diff * 0.05):
-                    pass
-                else: 
-                    error_matrix[learner_idx, dataset_idx] = -1
-                    index_h_matrix[learner_idx, dataset_idx] = None
-                    index_i_matrix[learner_idx, dataset_idx] = None
-                    index_j_matrix[learner_idx, dataset_idx] = None
-                    continue
-
-            # else mean curve
-            curves_group = group_lc_valid[learner_idx, dataset_idx, :, :]
-            mean_curve = np.nanmean(curves_group, axis=0)
-
-            # remove nan in curve & align with anchor index
-            mask_indices = ~np.isnan(mean_curve)
-            curves_group_clean = curves_group[:, mask_indices]
-            mean_curve_clean = mean_curve[mask_indices]   
-            anchor_list_clean = anchor_list_denser[mask_indices]
-
-            if len(mean_curve_clean) < 3:
-                error_matrix[learner_idx, dataset_idx] = 0
-                index_h_matrix[learner_idx, dataset_idx] = None
-                index_i_matrix[learner_idx, dataset_idx] = None
-                index_j_matrix[learner_idx, dataset_idx] = None
-                continue
-
-            # all possible h < i < j triples
-            num_points = len(mean_curve_clean)
-            triple_indices = [(h, i, j) for h in range(num_points - 2) 
-                              for i in range(h + 1, num_points - 1) 
-                              for j in range(i + 1, num_points)]
-
-            # find maximum convexity violation i
-            violations_pos = []
-            p_values = []
-            for (h, i, j) in triple_indices:
-                uneven_ratio_j = (anchor_list_clean[i] - anchor_list_clean[h]) / (anchor_list_clean[j] - anchor_list_clean[h]) 
-                uneven_ratio_h = (anchor_list_clean[j] - anchor_list_clean[i]) / (anchor_list_clean[j] - anchor_list_clean[h])
-                group_mid_point_hj = curves_group_clean[:, h] * uneven_ratio_h + curves_group_clean[:, j] * uneven_ratio_j
-                
-                valid_mask = ~np.isnan(curves_group_clean[:, i]) & ~np.isnan(group_mid_point_hj)
-                group_values_i = curves_group_clean[:, i][valid_mask]
-                group_values_mid = group_mid_point_hj[valid_mask]
-                
-                if len(group_values_i) < 2 or len(group_values_mid) < 2:
-                    p_value = 1     # only one estimation
-                elif np.mean(group_values_i) < np.mean(group_values_mid):
-                    p_value = 1     # save compute time
-                else:
-                    p_value = paired_greater_ttest_pvalue(group_values_i, group_values_mid)
-                violations_pos.append((h, i, j))
-                p_values.append(p_value)
-
-            # sort p value
-            sorted_indices = np.argsort(p_values)  # small to large
-            sorted_p_values = np.array(p_values)[sorted_indices]
-
-            #  Holm-adjusted p-values
-            adjusted_p_values = np.zeros_like(sorted_p_values)
-            for rank, p_value in enumerate(sorted_p_values, start=1):
-                adjusted_p_values[rank - 1] = p_value * (len(p_values) - rank + 1)
-
-            adjusted_p_values = np.minimum(adjusted_p_values, 1.0)  # p_value smaller than 1
-
-            # all significant indices (order in original p value)
-            significant_indices = sorted_indices[adjusted_p_values <= 0.05]
-            if len(significant_indices) > 0:
-                h, i, j = violations_pos[significant_indices[0]]
-                uneven_ratio_j = (anchor_list_clean[i] - anchor_list_clean[h]) / (anchor_list_clean[j] - anchor_list_clean[h]) 
-                uneven_ratio_h = (anchor_list_clean[j] - anchor_list_clean[i]) / (anchor_list_clean[j] - anchor_list_clean[h])
-                mid_point_hj = mean_curve_clean[h] * uneven_ratio_h + mean_curve_clean[j] * uneven_ratio_j
-                violation = mean_curve_clean[i] - mid_point_hj
-                
-                # normalization
-                # max_value = np.max(mean_curve_clean)
-                # min_value = np.min(mean_curve_clean)
-                error_matrix[learner_idx, dataset_idx] = violation # / (max_value - min_value)
-                index_h_matrix[learner_idx, dataset_idx] = anchor_list_clean[h]
-                index_i_matrix[learner_idx, dataset_idx] = anchor_list_clean[i]
-                index_j_matrix[learner_idx, dataset_idx] = anchor_list_clean[j]
-            else: 
-                error_matrix[learner_idx, dataset_idx] = 0
-                index_h_matrix[learner_idx, dataset_idx] = None
-                index_i_matrix[learner_idx, dataset_idx] = None
-                index_j_matrix[learner_idx, dataset_idx] = None
-    return error_matrix, index_h_matrix, index_i_matrix, index_j_matrix
-
-
-def straight_det_mono(error_matrix_y, error_matrix_x, input_dataset, threshold = 0.05):
-    # error array in (24, 72) 
-    # dataset in (72, 24, 5, 5, 137, 3)
     mean_data = np.nanmean(input_dataset, axis=(2, 3))
     mean_data = np.transpose(mean_data[:, :, :, :], (1, 0, 2, 3))
     mean_data_valid = mean_data[:,:,:,1]
@@ -308,8 +77,8 @@ def straight_det_mono(error_matrix_y, error_matrix_x, input_dataset, threshold =
             # classify (approximate) straght line
             if diff <= (threshold * all_dataset_diff):
                 # set zero
-                error_matrix_y[learner_idx, data_idx] = 0
-                error_matrix_x[learner_idx, data_idx] = 0
+                error_matrix_y[learner_idx, data_idx] = -1
+                error_matrix_x[learner_idx, data_idx] = -1
     return error_matrix_y, error_matrix_x
 
 
@@ -357,6 +126,8 @@ def global_monotonicity_violation(input_dataset, flat_filter = False, bonferroni
             # else mean curve
             curves_group = group_lc_valid[learner_idx, dataset_idx, :, :]
             mean_curve = np.nanmean(curves_group, axis=0)
+            if np.all(np.isnan(mean_curve)):
+                continue
 
             # remove nan in curve & align with anchor index
             mask_indices = ~np.isnan(mean_curve)
@@ -368,9 +139,6 @@ def global_monotonicity_violation(input_dataset, flat_filter = False, bonferroni
                 error_matrix_y[learner_idx, dataset_idx] = 0
                 error_matrix_x[learner_idx, dataset_idx] = 0
                 continue
-
-            # max_value = np.max(mean_curve_clean)
-            # min_value = np.min(mean_curve_clean)
 
             # find all possible i, j pairs
             num_points = len(mean_curve_clean)
@@ -421,7 +189,7 @@ def global_monotonicity_violation(input_dataset, flat_filter = False, bonferroni
                 error_matrix_x[learner_idx, dataset_idx] = 0
             else:       
                 # Y and X
-                monotonicity_error_Y = (max_difference) # / (max_value - min_value) 
+                monotonicity_error_Y = (max_difference) 
 
                 # use ∆ | data | to mitigate occasional fluctuations
                 num_data_diff = anchor_list_clean[j_index] - anchor_list_clean[i_index]
@@ -471,7 +239,9 @@ def global_convexity_violation(input_dataset, flat_filter = False, bonferroni = 
             # else mean curve
             curves_group = group_lc_valid[learner_idx, dataset_idx, :, :]
             mean_curve = np.nanmean(curves_group, axis=0)
-
+            if np.all(np.isnan(mean_curve)):
+                continue
+            
             # remove nan in curve & align with anchor index
             mask_indices = ~np.isnan(mean_curve)
             curves_group_clean = curves_group[:, mask_indices]
@@ -602,7 +372,9 @@ def peaking_detection(input_dataset, flat_filter = False, bonferroni = True, anc
             # else mean curve
             curves_group = group_lc_valid[learner_idx, dataset_idx, :, :]
             mean_curve = np.nanmean(curves_group, axis=0)
-
+            if np.all(np.isnan(mean_curve)):
+                continue
+            
             # remove nan in curve & align with anchor index
             mask_indices = ~np.isnan(mean_curve)
             curves_group_clean = curves_group[:, mask_indices]

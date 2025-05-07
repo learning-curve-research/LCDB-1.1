@@ -6,6 +6,7 @@ database-original
 openml_cache/*
 analysis/log/*
 analysis/backup/*
+analysis/plots/*
 
 *.sif
 *.pyc

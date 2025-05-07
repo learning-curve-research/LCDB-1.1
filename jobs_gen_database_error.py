@@ -7,18 +7,18 @@ from pathlib import Path
 import sys
 sys.path.append('lcdb_function')
 from directencoder import DirectEncoder
-from analysis.meta_feature import dataset_ids_CC18, dataset_ids_FULL, anchor_list_denser, learner_zoo_full_24, learner_zoo_full_mixNB
+from analysis.meta_feature import dataset_ids_CC18, dataset_ids_FULL, anchor_list_denser, learner_zoo_full_24, learner_zoo_mixNB
 
 
 # ======================== Manual Settings ========================
 # dataset list
-dataset_ids = dataset_ids_FULL  #dataset_ids_CC18
+dataset_ids =  dataset_ids_FULL #dataset_ids_FULL  #dataset_ids_CC18
 
 # extracted learner list
 learner_zoo = learner_zoo_full_24
 
 # results folder index
-start_index, end_index = 7, 10
+start_index, end_index = 117, 118
 
 # retrieval folder path
 input_path = '/lcdb11_raw/experiments_198_24_standard/'     # jobs 1-29
@@ -30,7 +30,7 @@ input_path = '/lcdb11/experiments_198_24_nofs_minmax/'          # jobs 1-117
 # input_path = '/lcdb11/experiments_CC18_mixNB_nofs_minmax/'    # jobs 1-3
 
 # database file name
-output_filename = "LCDB11_ER_265_nofs_minmax_198_1.3.hdf5"
+output_filename = "LCDB11_.hdf5"
 
 
 # ======================== Settings ========================
@@ -48,7 +48,7 @@ else:
 ######   NO train-val-test, 'ok' = 0, 'timeout' = 1, 'error' = error message
 # database setting: (dataset, learner, outer seed, inner seed, curve, feature scaling, clean-raw)
 results_array = np.full((len(dataset_ids), len(learner_zoo), 5, 5, 137, 3, 2), np.nan)  
-error_array = np.full(results_array.shape, '', dtype='U200')    # max 200
+error_array = np.full(results_array.shape, '', dtype='U100')    # max 100
 
 
 # ======================== Run ========================

@@ -4,36 +4,40 @@ import json
 from tqdm import tqdm
 from sklearn.metrics import accuracy_score, roc_auc_score, f1_score, log_loss
 from pathlib import Path
+import warnings
+warnings.filterwarnings('ignore')
+
 import sys
 sys.path.append('lcdb_function')
 from directencoder import DirectEncoder
-from analysis.meta_feature import dataset_ids_CC18, dataset_ids_FULL, anchor_list_denser, learner_zoo_full_24, learner_zoo_full_mixNB
+from analysis.meta_feature import dataset_ids_CC18, dataset_ids_FULL, anchor_list_denser, learner_zoo_full_24, learner_zoo_mixNB
 
 
 # ======================== Manual Settings ========================
 # dataset list
-dataset_ids = dataset_ids_FULL  #dataset_ids_CC18
+dataset_ids = dataset_ids_FULL      # dataset_ids_FULL  # dataset_ids_CC18
 
 # extracted learner list
-learner_zoo = learner_zoo_full_24
+learner_zoo = learner_zoo_full_24   # learner_zoo_full_24
 
 # results folder index
-start_index, end_index = 7, 10
+start_index, end_index = 20, 30
 
 # metric for extracting
-metric = 'error rate'   # 'l1', 'log-loss', 'AUC', 'error rate'
+metric = 'AUC'   # 'f1', 'log-loss', 'AUC', 'error rate'
 
 # retrieval folder path
 input_path = '/lcdb11_raw/experiments_198_24_standard/'     # jobs 1-29
+# input_path = '/lcdb11_raw/experiments_CC18_24_nofs_minmax/'         # jobs 1-12
+# input_path = '/lcdb11/experiments_198_24_nofs_minmax/'          # jobs 1-117
+# input_path = '/lcdb11/experiments_CC18_24_standard/'        # jobs 1-10
+
 # input_path = '/lcdb11_raw/experiments_198_mixNB_nofs_minmax/'     # jobs 1-4
 # input_path = '/lcdb11_raw/experiments_270_mixNB_standard/'        # jobs 1-3
-# input_path = '/lcdb11_raw/experiments_CC18_24_nofs_minmax/'         # jobs 1-12
-input_path = '/lcdb11/experiments_198_24_nofs_minmax/'          # jobs 1-117
-# input_path = '/lcdb11/experiments_CC18_24_standard/'        # jobs 1-10
 # input_path = '/lcdb11/experiments_CC18_mixNB_nofs_minmax/'    # jobs 1-3
 
 # database file name
-output_filename = "LCDB11_ER_265_nofs_minmax_198_1.3.hdf5"
+output_filename = "LCDB11_AUC(ovr)_265_198_24_standard_3.hdf5"
 
 
 # ======================== Settings ========================
@@ -75,10 +79,36 @@ def get_auc_from_json(json_obj):
     y_hat_proba_valid = myEncoder.decode_distribution_decompress(json_obj['predictproba_valid_compressed'])
     y_hat_proba_test = myEncoder.decode_distribution_decompress(json_obj['predictproba_test_compressed'])
 
-    auc_valid = roc_auc_score(y_valid, y_hat_proba_valid, multi_class='ovr', average='weighted')
-    auc_test = roc_auc_score(y_test, y_hat_proba_test, multi_class='ovr', average='weighted')
+    def compute_auc(y_true, y_score):
+        n_classes = len(np.unique(y_true))
+
+        # binary class (the output format is different between predict_proba and decision_function)
+        if n_classes == 2:
+            # (n_samples, 2)
+            if y_score.ndim == 2 and y_score.shape[1] == 2:
+                y_score = y_score[:, 1]  # pos prob
+            return roc_auc_score(y_true, y_score)
+        else:
+            # multiple class (the output format is the same)
+            return roc_auc_score(y_true, y_score, multi_class='ovr', average='weighted')
+
+    auc_valid = compute_auc(y_valid, y_hat_proba_valid)
+    auc_test = compute_auc(y_test, y_hat_proba_test)
 
     return auc_valid, auc_test
+
+# def get_auc_from_json(json_obj):
+#     myEncoder = DirectEncoder()
+#     y_valid = myEncoder.decode_label_vector_decompression(json_obj['y_valid'])
+#     y_test = myEncoder.decode_label_vector_decompression(json_obj['y_test'])
+
+#     y_hat_proba_valid = myEncoder.decode_distribution_decompress(json_obj['predictproba_valid_compressed'])
+#     y_hat_proba_test = myEncoder.decode_distribution_decompress(json_obj['predictproba_test_compressed'])
+
+#     auc_valid = roc_auc_score(y_valid, y_hat_proba_valid, multi_class='ovr', average='weighted')
+#     auc_test = roc_auc_score(y_test, y_hat_proba_test, multi_class='ovr', average='weighted')
+
+#     return auc_valid, auc_test
 
 
 def get_f1_from_json(json_obj):
@@ -146,7 +176,7 @@ for i in range(start_index, end_index):
                             elif metric == 'AUC':
                                 score_train = np.nan
                                 score_valid, score_test = get_auc_from_json(json_obj)
-                            elif metric == 'F1':
+                            elif metric == 'f1':
                                 score_train, score_valid, score_test = get_f1_from_json(json_obj)
                             elif metric == 'log-loss':
                                 score_train = np.nan
