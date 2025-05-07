@@ -8,6 +8,7 @@ analysis/log/*
 analysis/backup/*
 analysis/plots/*
 
+*.sh
 *.sif
 *.pyc
 *.json
