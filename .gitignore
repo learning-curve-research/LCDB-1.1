@@ -16,5 +16,5 @@ analysis/plots/*
 *.csv
 *.hdf5
 
-experiments/
-
+experiments/*
+!experiments/README.md
