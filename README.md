@@ -1,4 +1,4 @@
-# LCDB 1.1: LCDB 1.1: A Database Illustrating Learning Curves are more Ill-Behaved than Previously Thought
+# LCDB 1.1: A Database Illustrating Learning Curves are more Ill-Behaved than Previously Thought
 ### Project Structure
 ```
 📦 Project Root
