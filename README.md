@@ -28,7 +28,7 @@ We have stored all the probabilistic outputs and / or scores (when available for
 To ensure the reproducibility, please download the [container](https://surfdrive.surf.nl/files/index.php/s/TSe0nqWKcT5jPwK) and follow the [instruction](./experiments/README.md) in [`experiments`](./experiments/) folder. 
 
 ### License 
-This work is licensed under a Creative Commons Attribution-NonCommercial-ShareAlike 4.0 ([CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)) International License. 
+This work is licensed under a CC BY-NC-SA 4.0 - Creative Commons Attribution-NonCommercial-ShareAlike 4.0 ([CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)) International License. 
 
 ### Acknowledgement
 This work is primarily based on the [OpenML](https://www.openml.org/) dataset platform and the [Scikit-learn](https://scikit-learn.org/stable/) library.
