@@ -335,7 +335,6 @@ def global_convexity_violation(input_dataset, flat_filter = False, bonferroni = 
 
     return error_matrix, index_h_matrix, index_i_matrix, index_j_matrix
 
-
 def peaking_detection(input_dataset, flat_filter = False, bonferroni = True, anchor_list = anchor_list_denser): 
    
     # input dataset in (72/265, 24, 5, 5, 137, 3)    
@@ -451,14 +450,16 @@ def peaking_detection(input_dataset, flat_filter = False, bonferroni = True, anc
             _, p_value_convex = stats.ttest_1samp(group_violation, popmean=0, alternative='greater')
             # p_value of mono: h,i
             _, p_value_mono = stats.ttest_rel(group_values_i, group_values_h, alternative='greater')
+            _, p_value_mono2 = stats.ttest_rel(group_values_i, group_values_j, alternative='greater')
 
             if bonferroni: ############## BONFERRONI should be the sum of all testing
-                p_value_convex = p_value_convex * ( len(triple_indices) + len(pair_indices) )
-                p_value_mono = p_value_mono * ( len(triple_indices) + len(pair_indices) )
+                p_value_convex = p_value_convex * len(triple_indices) 
+                p_value_mono = p_value_mono * len(triple_indices) 
+                p_value_mono2 = p_value_mono2 * len(triple_indices) 
             else: 
                 pass
 
-            if p_value_convex >= 0.05 or p_value_mono >= 0.05: 
+            if p_value_convex >= 0.05 or p_value_mono >= 0.05 or p_value_mono2 >= 0.05: 
                 error_matrix[learner_idx, dataset_idx] = 0
                 index_h_matrix[learner_idx, dataset_idx] = None
                 index_i_matrix[learner_idx, dataset_idx] = None
