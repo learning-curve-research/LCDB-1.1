@@ -1,4 +1,4 @@
-# Introduction of LCDB 1.1 (Learning Curves Database 1.1)
+# Introduction of Learning Curves Database 1.1 (LCDB 1.1)
 
 ### Different versions of the data:
 
