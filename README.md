@@ -24,8 +24,8 @@ Install the packages in [`analysis/requirements.txt`](./analysis/requirements.tx
 ### Contact us if you need more metrics!
 We have stored all the probabilistic outputs and / or scores (when available for the learner). However, these files are too large for us to host for the broader public. If you are interested in a particular metric that we do not include, please contact us and we can compute it and host it. 
 
-### Workflow for Recomputing LCDB 1.1
-To ensure the reproducibility, please download the [container](https://surfdrive.surf.nl/files/index.php/s/TSe0nqWKcT5jPwK) and follow the [instruction](./experiments/README.md) in [`experiments`](./experiments/) folder. 
+### Workflow for Computing LCDB 1.1
+To ensure the reproducibility, please download the [container](https://surfdrive.surf.nl/files/index.php/s/TSe0nqWKcT5jPwK) (or generate it by using [`lcdb11container_builer.zip`](./experiments/lcdb11container_builder.zip)) and follow the [instruction](./experiments/README.md) in [`experiments`](./experiments/) folder. 
 
 ### License 
 This work is licensed under a CC BY-NC-SA 4.0 - Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License. To view a copy of this license, visit [https://creativecommons.org/licenses/by-nc-sa/4.0/](https://creativecommons.org/licenses/by-nc-sa/4.0/)
