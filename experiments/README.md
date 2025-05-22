@@ -2,9 +2,9 @@
 To ensure the reproducibility, please download the [container](https://surfdrive.surf.nl/files/index.php/s/TSe0nqWKcT5jPwK) or use the [`lcdb11container_builer.zip`](./lcdb11container_builder.zip) to generate the same image. 
 
 1. Ensure there are three folder under path `/lcdb1.1`: `jobs`, `logs`, `results`. 
-2. Run jobs_create.ipynb to create the jobs of generating learning curves with different setting combinations. 
-3. Submit the jobs through `job_container.sh`. 
-4. Check the status of jobs and create jobs for resubmition by `jobs_resubmit.ipynb`. 
+2. Run `jobs_create.ipynb` to create the jobs of generating learning curves with different setting combinations. 
+3. Submit the jobs. 
+4. Check the status of jobs and create jobs for resubmition by `jobs_resubmit.py`. 
 5. Rename the `results` folder as `results1`, `results2`, ..., and create a new `results` folder
 6. Repeat step 3-5 until all jobs are done. 
 7. Use `jobs_gen_database.py` to generate the dataset. 
