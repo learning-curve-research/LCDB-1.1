@@ -1,4 +1,10 @@
 # LCDB 1.1: A Database Illustrating Learning Curves are more Ill-Behaved than Previously Thought
+
+<p align="center">
+  <a href="https://arxiv.org/abs/2505.15657" target="_blank"><img src="https://img.shields.io/badge/arXiv-2505.15657-red"></a>
+  <a href="https://data.4tu.nl/private_datasets/V7dDlGyQJqPc_mXUAJL1MweACKG557GQtOWIVHhYpjU" target="_blank"><img src="https://img.shields.io/badge/4TU.ResearchData-LCDB 1.1-orange"></a>  
+</p>
+
 ### Project Structure
 ```
 📦 Project Root
