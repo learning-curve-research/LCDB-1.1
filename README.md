@@ -22,7 +22,9 @@
 | **LCDB 1.1**  | with and without dl   | none, min-max, standard        | 4 times denser                 | 28 \| 265    |
 
 ### How to use the LCDB 1.1? 
-First download the precomputed learning curves from [4TU.ResearchData](https://data.4tu.nl/private_datasets/V7dDlGyQJqPc_mXUAJL1MweACKG557GQtOWIVHhYpjU) and extract them to the folder [`dataset`](./dataset/). The [Readme](./dataset/README.md) in the dataset folder explains the files and their content. Or you can use the demonstration in the [`LCDB11_demo.ipynb`](./LCDB11_demo.ipynb) to download the data automatically. Useful metafeatures can be found in [`meta_feature.py`](./analysis/meta_feature.py).
+First download the precomputed learning curves from [4TU.ResearchData](https://data.4tu.nl/private_datasets/V7dDlGyQJqPc_mXUAJL1MweACKG557GQtOWIVHhYpjU) and extract them to the folder [`dataset`](./dataset/). The [Readme](./dataset/README.md) in the dataset folder explains the files and their content. Or you can use the demonstration in [`LCDB11_demo.ipynb`](./LCDB11_demo.ipynb) to download the data automatically. Useful metafeatures can be found in [`meta_feature.py`](./analysis/meta_feature.py) or folder [`meta_feature`](./meta_feature/). 
+
+Note, we recommend using learning curves from validation sets, since the sets differ in each inner and outer split, to ensure a no data-leakage version. The demostration can be found in [`LCDB11_demo.ipynb`](./LCDB11_demo.ipynb). 
 
 ### Reproduce all figures from the paper
 Install the packages in [`analysis/requirements.txt`](./analysis/requirements.txt). Once the setup is complete,the analysis notebooks in the [`analysis`](./analysis/) folder illustrate the usage. 
