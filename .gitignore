@@ -15,6 +15,3 @@ analysis/plots/*
 *.ipynb_checkpoints
 *.csv
 *.hdf5
-
-experiments/*
-!experiments/README.md
