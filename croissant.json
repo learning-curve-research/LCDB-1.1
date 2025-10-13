@@ -46,10 +46,10 @@
   },
   "@type": "sc:Dataset",
   "name": "LCDB 1.1",
-  "description": "Sample-wise learning curves plot performance versus training set size. They are useful for studying scaling laws and speeding up hyperparameter tuning and model selection. Learning curves are often assumed to be well-behaved: monotone (i.e. improving with more data) and convex. By constructing the Learning Curves Database 1.1, a larger scale database wither high resolution learning curves, we show that that learning curves are less often well-behaved than previously believed. Based on statistically rigorous methods, we find significant ill-behavior in approximately 14\\% of learning curves, almost twice as much as earlier estimates. We also identify which learners are to blame, and find that specific learners are more ill-behaved than others. Additionally, we find that different feature scalings rarely resolves ill-behavior. We evaluate the impact of ill-behavior on downstream tasks, such as learning curve fitting and model selection, and find it poses significant challenges, emphasizing the relevance of ill-behaving curves, and underscores the challenging nature of our newly proposed learning curve database.",
+  "description": "Sample-wise learning curves plot performance versus training set size. They are useful for studying scaling laws and speeding up hyperparameter tuning and model selection. Learning curves are often assumed to be well-behaved: monotone (i.e. improving with more data) and convex. By constructing the Learning Curves Database 1.1, a larger scale database wither high resolution learning curves, we show that that learning curves are less often well-behaved than previously believed. Based on statistically rigorous methods, we find significant ill-behavior in approximately 15% of learning curves, almost twice as much as earlier estimates. We also identify which learners are to blame, and find that specific learners are more ill-behaved than others. Additionally, we find that different feature scalings rarely resolves ill-behavior. We evaluate the impact of ill-behavior on downstream tasks, such as learning curve fitting and model selection, and find it poses significant challenges, emphasizing the relevance of ill-behaving curves, and underscores the challenging nature of our newly proposed learning curve database.",
   "conformsTo": "http://mlcommons.org/croissant/1.0",
-  "citeAs": "coming soon",
-  "license": "CC BY-NC-SA 4.0",
+  "citeAs": "@article{yan2025lcdb, title={LCDB 1.1: A Database Illustrating Learning Curves Are More Ill-Behaved Than Previously Thought}, author={Yan, Cheng and Mohr, Felix and Viering, Tom}, journal={arXiv preprint arXiv:2505.15657}, year={2025}}",
+  "license": "CC BY 4.0",
   "url": "https://data.4tu.nl/private_datasets/V7dDlGyQJqPc_mXUAJL1MweACKG557GQtOWIVHhYpjU",
   "distribution": [
     {
@@ -57,99 +57,99 @@
       "@id": "LCDB11_AUC_265_24",
       "name": "LCDB11_AUC_265_24.hdf5",
       "description": "LCDB 1.1: AUC learning curves of 24 leaners in 265 datasets (weighted One-vs-the-Rest (OvR) for multiclass)",
-      "contentUrl": "https://data.4tu.nl/file/3bd18108-fad0-4e4c-affd-4341fba99306/77832f78-9d7f-4db1-ab97-abceb9e227d9",
+      "contentUrl": "https://data.4tu.nl/file/3bd18108-fad0-4e4c-affd-4341fba99306/f55db620-c45f-46e1-9109-db079b51eebd",
       "encodingFormat": "application/x-hdf5",
-      "sha256": "9A7D14478A1A3231873FCC66BDA3606C7857F872CF3CBD368BFB12F6DFE9A14F"
+      "sha256": "ec21e1918403aa826a9f1aed554c86c58b630f2549fe0b7778abb55b439c8d07"
     },
     {
       "@type": "cr:FileObject",
-      "@id": "LCDB11_AUC_265_mixNB",
-      "name": "LCDB11_AUC_265_mixNB.hdf5",
+      "@id": "LCDB11_AUC_265_4mixNB",
+      "name": "LCDB11_AUC_265_4mixNB.hdf5",
       "description": "LCDB 1.1: AUC learning curves of 4 mixed NB leaners in 265 datasets (weighted One-vs-the-Rest (OvR) for multiclass)",
-      "contentUrl": "https://data.4tu.nl/file/3bd18108-fad0-4e4c-affd-4341fba99306/58f5b37e-7dde-4600-acbb-d6f206eb6e45",
+      "contentUrl": "https://data.4tu.nl/file/3bd18108-fad0-4e4c-affd-4341fba99306/fb81a4a6-c4c7-4401-9b6e-5cbe8afeadc1",
       "encodingFormat": "application/x-hdf5",
-      "sha256": "87EB8DCF0A1D89BBE9DF24324C01439011A520AB6A3669EAE431288D6FB46BB9"
+      "sha256": "87eb8dcf0a1d89bbe9df24324c01439011a520ab6a3669eae431288d6fb46bb9"
     },
     {
       "@type": "cr:FileObject",
       "@id": "LCDB11_ER_265_24",
       "name": "LCDB11_ER_265_24.hdf5",
       "description": "LCDB 1.1: error rate learning curves of 24 leaners in 265 datasets",
-      "contentUrl": "https://data.4tu.nl/file/3bd18108-fad0-4e4c-affd-4341fba99306/18519a1b-2fbd-45cb-b208-cf5a56e3293c",
+      "contentUrl": "https://data.4tu.nl/file/3bd18108-fad0-4e4c-affd-4341fba99306/a0c9163c-3cec-4748-9753-c9998e99ecab",
       "encodingFormat": "application/x-hdf5",
-      "sha256": "B2DD45C4715C9C620B5781C5A77DA00B978EA1A697DA0AA90E70A6B4D369A86C"
+      "sha256": "0a3087fc61a1abf1dc6169b40b954d52a117e0fb86f788acfabc0e21143f6b29"
     },
     {
       "@type": "cr:FileObject",
-      "@id": "LCDB11_ER_265_mixNB",
-      "name": "LCDB11_ER_265_mixNB.hdf5",
+      "@id": "LCDB11_ER_265_4mixNB",
+      "name": "LCDB11_ER_265_4mixNB.hdf5",
       "description": "LCDB 1.1: error rate learning curves of 4 mixed NB leaners in 265 datasets",
-      "contentUrl": "https://data.4tu.nl/file/3bd18108-fad0-4e4c-affd-4341fba99306/8f65a88b-1ff5-4a83-a3d8-09823e13400f",
+      "contentUrl": "https://data.4tu.nl/file/3bd18108-fad0-4e4c-affd-4341fba99306/cb14f116-0df9-4a43-9bb9-2a06d7642d51",
       "encodingFormat": "application/x-hdf5",
-      "sha256": "8D3C8B355515A2E7B326D6DD0C3539CDAFBAEE260A074703FAF3E9869FAF82E2"
+      "sha256": "8d3c8b355515a2e7b326d6dd0c3539cdafbaee260a074703faf3e9869faf82e2"
     },
     {
       "@type": "cr:FileObject",
       "@id": "LCDB11_ER_CC18_24",
       "name": "LCDB11_ER_CC18_24.hdf5",
       "description": "LCDB 1.1: error rate learning curves of 24 leaners in CC-18 datasets",
-      "contentUrl": "https://data.4tu.nl/file/3bd18108-fad0-4e4c-affd-4341fba99306/d1016687-644d-4c26-9e22-2d5e4a665f12",
+      "contentUrl": "https://data.4tu.nl/file/3bd18108-fad0-4e4c-affd-4341fba99306/666c2a47-faa7-4218-a14d-2f2ffe0bbb8a",
       "encodingFormat": "application/x-hdf5",
-      "sha256": "5E2FD4BC720C814459175502C78672907590A6C69012B47E4D70B95B4F0F11F7"
+      "sha256": "9096b7756ecf496569e701a475c7e78c0b65069b8d5111b4501f4b70d8f2c493"
     },
     {
       "@type": "cr:FileObject",
       "@id": "LCDB11_f1_265_24",
       "name": "LCDB11_f1_265_24.hdf5",
       "description": "LCDB 1.1: F1 score learning curves of 24 leaners in 265 datasets",
-      "contentUrl": "https://data.4tu.nl/file/3bd18108-fad0-4e4c-affd-4341fba99306/499e0751-766e-49b1-a9bb-bed7e420f7a3",
+      "contentUrl": "https://data.4tu.nl/file/3bd18108-fad0-4e4c-affd-4341fba99306/089a1fe8-f2f7-406d-a7ff-5afdfb0c256f",
       "encodingFormat": "application/x-hdf5",
-      "sha256": "E5F181A963271057D7FD3C7F91B6966AF6A60A7C021DAEBD6037EB606AFEC6F9"
+      "sha256": "b759fde60651456e3365340f4ed1aa7761bd22a3d1934688c4b72c2617f4c2cf"
     },
     {
       "@type": "cr:FileObject",
-      "@id": "LCDB11_f1_265_mixNB",
-      "name": "LCDB11_f1_265_mixNB.hdf5",
+      "@id": "LCDB11_f1_265_4mixNB",
+      "name": "LCDB11_f1_265_4mixNB.hdf5",
       "description": "LCDB 1.1: F1 score learning curves of 4 mixed NB leaners in 265 datasets",
-      "contentUrl": "https://data.4tu.nl/file/3bd18108-fad0-4e4c-affd-4341fba99306/bf766e1f-836e-47bd-8aef-c15cbb7501fb",
+      "contentUrl": "https://data.4tu.nl/file/3bd18108-fad0-4e4c-affd-4341fba99306/827707c2-3aa5-401a-81f6-6c2b4227eb30",
       "encodingFormat": "application/x-hdf5",
-      "sha256": "0F66B9CA4D413D88C030B460E80825FEE3194BAAE0CC30AD3B3375A6DFAA53F2"
+      "sha256": "0f66b9ca4d413d88c030b460e80825fee3194baae0cc30ad3b3375a6dfaa53f2"
     },
     {
       "@type": "cr:FileObject",
       "@id": "LCDB11_log-loss_265_24",
       "name": "LCDB11_log-loss_265_24.hdf5",
       "description": "LCDB 1.1: log-loss learning curves of 24 leaners in 265 datasets",
-      "contentUrl": "https://data.4tu.nl/file/3bd18108-fad0-4e4c-affd-4341fba99306/f0acffa7-b031-4efe-9505-21ac4d448231",
+      "contentUrl": "https://data.4tu.nl/file/3bd18108-fad0-4e4c-affd-4341fba99306/90b43b9e-b7b1-45d7-87b7-e9ee9706cd07",
       "encodingFormat": "application/x-hdf5",
-      "sha256": "D9F9F671F3B53E75E4C320D1F107EF93D9450074267154FE660D1A67A2542041"
+      "sha256": "5a4660caaf5854e5453130e851be6147acabeb811949c1e91c6e060d9be303ef"
     },
     {
       "@type": "cr:FileObject",
-      "@id": "LCDB11_log-loss_265_mixNB",
-      "name": "LCDB11_log-loss_265_mixNB.hdf5",
+      "@id": "LCDB11_log-loss_265_4mixNB",
+      "name": "LCDB11_log-loss_265_4mixNB.hdf5",
       "description": "LCDB 1.1: log-loss learning curves of 4 mixed NB leaners in 265 datasets",
-      "contentUrl": "https://data.4tu.nl/file/3bd18108-fad0-4e4c-affd-4341fba99306/3b0be3fc-f1e4-42df-a61b-fe699bfab0f1",
+      "contentUrl": "https://data.4tu.nl/file/3bd18108-fad0-4e4c-affd-4341fba99306/285acbeb-6f65-4efd-a1c7-ca9f69c1d30c",
       "encodingFormat": "application/x-hdf5",
-      "sha256": "721503B67CD5F97C48A6FB34E4A6F869D4427446FC696C7EAD739B2242333B0B"
+      "sha256": "721503b67cd5f97c48a6fb34e4a6f869d4427446fc696c7ead739b2242333b0b"
     },
     {
       "@type": "cr:FileObject",
       "@id": "LCDB11_msg_265_24",
       "name": "LCDB11_msg_265_24.hdf5",
       "description": "LCDB 1.1: status and error message of 24 leaners in 265 datasets",
-      "contentUrl": "https://data.4tu.nl/file/3bd18108-fad0-4e4c-affd-4341fba99306/5862f359-69e6-4732-9195-1d68552b976a",
+      "contentUrl": "https://data.4tu.nl/file/3bd18108-fad0-4e4c-affd-4341fba99306/b5802f15-0a66-43cb-9fe5-9338179d130c",
       "encodingFormat": "application/x-hdf5",
-      "sha256": "B22399AD494304C041D564DA0690844BC7C22947C9B628739AB711531544C9C2"
+      "sha256": "b22399ad494304c041d564da0690844bc7c22947c9b628739ab711531544c9c2"
     },
     {
       "@type": "cr:FileObject",
       "@id": "LCDB11_traintime_265_24",
       "name": "LCDB11_traintime_265_24.hdf5",
       "description": "LCDB 1.1: training time learning curves of 24 leaners in 265 datasets",
-      "contentUrl": "https://data.4tu.nl/file/3bd18108-fad0-4e4c-affd-4341fba99306/82170e2b-592d-47ee-82ce-0dce1bfb38e2",
+      "contentUrl": "https://data.4tu.nl/file/3bd18108-fad0-4e4c-affd-4341fba99306/6d493107-5ee6-404a-b11d-9c15a16c9606",
       "encodingFormat": "application/x-hdf5",
-      "sha256": "AFB99958FE137DF081BF33D2C8ED72BA99651DC48920FD35BD2B7D7F94D9BA86"
+      "sha256": "794d039dd62f7b66f701fa570a61ade4e448a32bf7812ef9d29ed5f2c14961c1"
     },
     {
       "@type": "cr:FileSet",
@@ -161,13 +161,13 @@
           "@id": "LCDB11_AUC_265_24"
         },
         {
-          "@id": "LCDB11_AUC_265_mixNB"
+          "@id": "LCDB11_AUC_265_4mixNB"
         },
         {
           "@id": "LCDB11_ER_265_24"
         },
         {
-          "@id": "LCDB11_ER_265_mixNB"
+          "@id": "LCDB11_ER_265_4mixNB"
         },
         {
           "@id": "LCDB11_ER_CC18_24"
@@ -176,13 +176,13 @@
           "@id": "LCDB11_f1_265_24"
         },
         {
-          "@id": "LCDB11_f1_265_mixNB"
+          "@id": "LCDB11_f1_265_4mixNB"
         },
         {
           "@id": "LCDB11_log-loss_265_24"
         },
         {
-          "@id": "LCDB11_log-loss_265_mixNB"
+          "@id": "LCDB11_log-loss_265_4mixNB"
         },
         {
           "@id": "LCDB11_msg_265_24"

@@ -1,7 +1,6 @@
 # Introduction of Learning Curves Database 1.1 (LCDB 1.1)
 
 ### Different versions of the data:
-
 The dataset names follow this format: `LCDB11_<Metric>_<Dataset>_<Learner>`
 Each component represents different characteristics, explained as follows:
 - **Metric**: 
@@ -20,7 +19,7 @@ Each component represents different characteristics, explained as follows:
 
 ### Data structure: 
 When loading the dataset using HDF5 (e.g., `LCDB11_ER_265_24.hdf5`), you will get the shape of file in for example `LCDB11_ER_ 265.hdf5`: (265, 24, 5, 5, 137, 3, 3, 2), each dimension corresponds to the following components, in order: 
-`(dataset, learner, outer split, inner split, anchor, train-val-test, noFS-mixmaxFS-standardFS, raw-clean), `
+`(dataset, learner, outer split, inner split, anchor, train-val-test, noFS-mixmaxFS-standardFS, noDataLeakage-DataLeakage), `
 where the dimensions are:
   - `dataset`: index indicating the dataset, see [`meta_feature.py`](../analysis/meta_feature.py)
   - `learner`: index indicating the learner, see [`meta_feature.py`](../analysis/meta_feature.py)

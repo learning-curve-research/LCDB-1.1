@@ -1,5 +1,5 @@
 # Workflow ans Experiments
-To ensure the reproducibility, please download the [container](https://surfdrive.surf.nl/files/index.php/s/TSe0nqWKcT5jPwK) or use the [`lcdb11container_builer.zip`](./lcdb11container_builder.zip) to generate the same image. 
+To ensure the reproducibility, please download the [container](https://surfdrive.surf.nl/files/index.php/s/TSe0nqWKcT5jPwK) or use the [`env`](./env) to generate the same image. 
 
 1. Ensure there are three folder under path `/lcdb1.1`: `jobs`, `logs`, `results`. 
 2. Run `jobs_create.ipynb` to create the jobs of generating learning curves with different setting combinations. 
