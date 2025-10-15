@@ -15,6 +15,7 @@
 ├── 📂 dataset            — The LCDB 1.1 datasets 
 ├── 📂 experiments        — Files for organising the large-scale experiments
 ├── 📂 lcdb_function      — Functions for computing the learning curves
+├── 📂 metadata           — Meta data about LCDB 1.1
 └── LCDB11_demo.ipynb     - showing how to use our database
 ```
 
@@ -36,7 +37,7 @@ Install the packages in [`analysis/requirements.txt`](./analysis/requirements.tx
 We have stored all the probabilistic outputs and / or scores (when available for the learner). However, these files are too large for us to host for the broader public. If you are interested in a particular metric that we do not include, please contact us and we can compute it and host it. 
 
 ### Workflow for Computing LCDB 1.1
-To ensure the reproducibility, please download the [container](https://surfdrive.surf.nl/files/index.php/s/TSe0nqWKcT5jPwK) (or generate it by using  or use the [`env`](./experiments/env) to generate the same image) and follow the [instruction](./experiments/README.md) in [`experiments`](./experiments/) folder. 
+To ensure the reproducibility, please download the [container](https://surfdrive.surf.nl/files/index.php/s/TSe0nqWKcT5jPwK) (or generate it by using  or use the [`env`](./experiments/env) to generate the same image) and see [`experiments`](./experiments/) folder. 
 
 ### License 
 This work is licensed under a CC BY 4.0 - - Creative Commons Attribution 4.0 International License.
