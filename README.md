@@ -26,12 +26,12 @@
 | **LCDB 1.1**  | with and without dl   | none, min-max, standard        | 4 times denser                 | 32 \| 265    |
 
 ### How to use the LCDB 1.1? 
-First download the precomputed learning curves from [4TU.ResearchData](https://data.4tu.nl/private_datasets/V7dDlGyQJqPc_mXUAJL1MweACKG557GQtOWIVHhYpjU) and extract them to the folder [`dataset`](./dataset/). The [Readme](./dataset/README.md) in the dataset folder explains the files and their content. Or you can use the demonstration in [`LCDB11_demo.ipynb`](./LCDB11_demo.ipynb) to download the data automatically. Useful metafeatures can be found in folder [`meta_feature`](./meta_feature/). 
+First download the precomputed learning curves from [4TU.ResearchData](https://data.4tu.nl/private_datasets/V7dDlGyQJqPc_mXUAJL1MweACKG557GQtOWIVHhYpjU) and extract them to the folder [`dataset`](./dataset/). The [Readme](./dataset/README.md) in the dataset folder explains the files and their content. Or you can use the demonstration in [`LCDB11_demo.ipynb`](./LCDB11_demo.ipynb) to download the data automatically. Useful metadata can be found in folder [metadata](./metadata/). 
 
 Note, we recommend using learning curves from validation sets, since the sets differ in each inner and outer split, to ensure a no data-leakage version. The demostration can be found in [`LCDB11_demo.ipynb`](./LCDB11_demo.ipynb). 
 
 ### Reproduce all figures from the paper
-Install the packages in [`analysis/requirements.txt`](./analysis/requirements.txt). Once the setup is complete,the analysis notebooks in the [`analysis`](./analysis/) folder illustrate the usage. 
+Install the packages in [`analysis/requirements4analysis.txt`](./analysis/requirements4analysis.txt) (note: these dependencies are only needed for analysis). Once the setup is complete,the analysis notebooks in the [`analysis`](./analysis/) folder illustrate the usage. 
 
 ### Contact us if you need more metrics!
 We have stored all the probabilistic outputs and / or scores (when available for the learner). However, these files are too large for us to host for the broader public. If you are interested in a particular metric that we do not include, please contact us and we can compute it and host it. 
