@@ -1,0 +1,5 @@
+﻿index,learner_zoo_mixNB
+0,mixBernoulliNB
+1,mixMultinomialNB
+2,mixComplementNB
+3,mixGaussianNB

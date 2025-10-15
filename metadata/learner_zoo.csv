@@ -1,0 +1,25 @@
+﻿index,learner_full,learner,learner_abbreviation
+0,SVC_linear,SVM_Linear,SVM_Linear
+1,SVC_poly,SVM_Poly,SVM_Poly
+2,SVC_rbf,SVM_RBF,SVM_RBF
+3,SVC_sigmoid,SVM_Sigmoid,SVM_Sigmoid
+4,sklearn.tree.DecisionTreeClassifier,Decision Tree,DT
+5,sklearn.tree.ExtraTreeClassifier,ExtraTree,ET
+6,sklearn.linear_model.LogisticRegression,LogisticRegression,LR
+7,sklearn.linear_model.PassiveAggressiveClassifier,PassiveAggressive,PA
+8,sklearn.linear_model.Perceptron,Perceptron,Perceptron
+9,sklearn.linear_model.RidgeClassifier,RidgeClassifier,Ridge
+10,sklearn.linear_model.SGDClassifier,SGDClassifier,SGD
+11,sklearn.neural_network.MLPClassifier,MLP,MLP
+12,sklearn.discriminant_analysis.LinearDiscriminantAnalysis,LDA,LDA
+13,sklearn.discriminant_analysis.QuadraticDiscriminantAnalysis,QDA,QDA
+14,sklearn.naive_bayes.BernoulliNB,BernoulliNB,BernoulliNB
+15,sklearn.naive_bayes.MultinomialNB,MultinomialNB,MultinomialNB
+16,sklearn.naive_bayes.ComplementNB,ComplementNB,ComplementNB
+17,sklearn.naive_bayes.GaussianNB,GaussianNB,GaussianNB
+18,sklearn.neighbors.KNeighborsClassifier,KNN,KNN
+19,sklearn.neighbors.NearestCentroid,NearestCentroid,NC
+20,sklearn.ensemble.ExtraTreesClassifier,ens.ExtraTrees,ens.ET
+21,sklearn.ensemble.RandomForestClassifier,ens.RandomForest,ens.RF
+22,sklearn.ensemble.GradientBoostingClassifier,ens.GradientBoosting,ens.GB
+23,sklearn.dummy.DummyClassifier,DummyClassifier,Dummy

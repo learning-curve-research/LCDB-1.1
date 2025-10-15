@@ -13,5 +13,4 @@ analysis/plots/*
 *.pyc
 *.json
 *.ipynb_checkpoints
-*.csv
 *.hdf5
