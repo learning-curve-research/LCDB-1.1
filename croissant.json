@@ -46,11 +46,11 @@
   },
   "@type": "sc:Dataset",
   "name": "LCDB 1.1",
-  "description": "Sample-wise learning curves plot performance versus training set size. They are useful for studying scaling laws and speeding up hyperparameter tuning and model selection. Learning curves are often assumed to be well-behaved: monotone (i.e. improving with more data) and convex. By constructing the Learning Curves Database 1.1, a larger scale database wither high resolution learning curves, we show that that learning curves are less often well-behaved than previously believed. Based on statistically rigorous methods, we find significant ill-behavior in approximately 15% of learning curves, almost twice as much as earlier estimates. We also identify which learners are to blame, and find that specific learners are more ill-behaved than others. Additionally, we find that different feature scalings rarely resolves ill-behavior. We evaluate the impact of ill-behavior on downstream tasks, such as learning curve fitting and model selection, and find it poses significant challenges, emphasizing the relevance of ill-behaving curves, and underscores the challenging nature of our newly proposed learning curve database.",
+  "description": "Sample-wise learning curves plot performance versus training set size. They are useful for studying scaling laws and speeding up hyperparameter tuning and model selection. Learning curves are often assumed to be well-behaved: monotone (i.e. improving with more data) and convex. By constructing the Learning Curves Database 1.1 (LCDB 1.1), a large-scale database with high-resolution learning curves including more modern learners (CatBoost, TabNet, RealMLP and TabPFN), we show that learning curves are less often well-behaved than previously thought. Using statistically rigorous methods, we observe significant ill-behavior in approximately 15% of the learning curves, almost twice as much as in previous estimates. We also identify which learners are to blame and show that specific learners are more ill-behaved than others. Additionally, we demonstrate that different feature scalings rarely resolve ill-behavior. We evaluate the impact of ill-behavior on downstream tasks, such as learning curve fitting and model selection, and find it poses significant challenges, underscoring the relevance and potential of LCDB 1.1 as a challenging benchmark for future research. ",
   "conformsTo": "http://mlcommons.org/croissant/1.0",
   "citeAs": "@article{yan2025lcdb, title={LCDB 1.1: A Database Illustrating Learning Curves Are More Ill-Behaved Than Previously Thought}, author={Yan, Cheng and Mohr, Felix and Viering, Tom}, journal={arXiv preprint arXiv:2505.15657}, year={2025}}",
   "license": "CC BY 4.0",
-  "url": "https://data.4tu.nl/private_datasets/V7dDlGyQJqPc_mXUAJL1MweACKG557GQtOWIVHhYpjU",
+  "url": "https://doi.org/10.4121/3bd18108-fad0-4e4c-affd-4341fba99306",
   "distribution": [
     {
       "@type": "cr:FileObject",
@@ -87,6 +87,42 @@
       "contentUrl": "https://data.4tu.nl/file/3bd18108-fad0-4e4c-affd-4341fba99306/cb14f116-0df9-4a43-9bb9-2a06d7642d51",
       "encodingFormat": "application/x-hdf5",
       "sha256": "8d3c8b355515a2e7b326d6dd0c3539cdafbaee260a074703faf3e9869faf82e2"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "LCDB11_ER_265_catboost",
+      "name": "LCDB11_ER_265_catboost.hdf5",
+      "description": "LCDB 1.1: error rate learning curves of CatBoost in 265 datasets",
+      "contentUrl": "https://data.4tu.nl/file/3bd18108-fad0-4e4c-affd-4341fba99306/0fd40537-0bee-4878-b4ff-e7ab535ee612",
+      "encodingFormat": "application/x-hdf5",
+      "sha256": "5619e802ebf3b06a95b5ae5317495e8645ba3bd4746089df8b93c6f87562e347"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "LCDB11_ER_265_realmlp",
+      "name": "LCDB11_ER_265_realmlp.hdf5",
+      "description": "LCDB 1.1: error rate learning curves of RealMLP in 265 datasets",
+      "contentUrl": "https://data.4tu.nl/file/3bd18108-fad0-4e4c-affd-4341fba99306/f6d729cc-9d41-42fc-9cdb-b824cc7ae65a",
+      "encodingFormat": "application/x-hdf5",
+      "sha256": "3b3468cc0ae408ecae812255ccd3a226716143a9f1db6ad2e9d7231f4d6c66a4"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "LCDB11_ER_265_tabnet",
+      "name": "LCDB11_ER_265_tabnet.hdf5",
+      "description": "LCDB 1.1: error rate learning curves of TabNet in 265 datasets",
+      "contentUrl": "https://data.4tu.nl/file/3bd18108-fad0-4e4c-affd-4341fba99306/24ac4bc6-dce1-4150-89bd-e5c92504ac7b",
+      "encodingFormat": "application/x-hdf5",
+      "sha256": "46492fce34978ed577236864f99bd486d7366e78c1c65cce104716e258d234a3"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "LCDB11_ER_265_tabpfn",
+      "name": "LCDB11_ER_265_tabpfn.hdf5",
+      "description": "LCDB 1.1: error rate learning curves of TabPFN v2 in 265 datasets",
+      "contentUrl": "https://data.4tu.nl/file/3bd18108-fad0-4e4c-affd-4341fba99306/24ac4bc6-dce1-4150-89bd-e5c92504ac7b",
+      "encodingFormat": "application/x-hdf5",
+      "sha256": "78322eaa312dd473b1d671dbf677736ad903379a6e5586f00fcadb812ee0325a"
     },
     {
       "@type": "cr:FileObject",
@@ -138,9 +174,9 @@
       "@id": "LCDB11_msg_265_24",
       "name": "LCDB11_msg_265_24.hdf5",
       "description": "LCDB 1.1: status and error message of 24 leaners in 265 datasets",
-      "contentUrl": "https://data.4tu.nl/file/3bd18108-fad0-4e4c-affd-4341fba99306/b5802f15-0a66-43cb-9fe5-9338179d130c",
+      "contentUrl": "https://data.4tu.nl/file/3bd18108-fad0-4e4c-affd-4341fba99306/455fa67c-e3b7-4857-ac01-0a1a1f93e4a0",
       "encodingFormat": "application/x-hdf5",
-      "sha256": "b22399ad494304c041d564da0690844bc7c22947c9b628739ab711531544c9c2"
+      "sha256": "55d91d9a5157a4e8a9083d09d8cb8cb99ea7b41ddedabef1d0784c715e0fe7c7"
     },
     {
       "@type": "cr:FileObject",
@@ -168,6 +204,18 @@
         },
         {
           "@id": "LCDB11_ER_265_4mixNB"
+        },
+        {
+          "@id": "LCDB11_ER_265_catboost"
+        },
+        {
+          "@id": "LCDB11_ER_265_realmlp"
+        },
+        {
+          "@id": "LCDB11_ER_265_tabnet"
+        },
+        {
+          "@id": "LCDB11_ER_265_tabpfn"
         },
         {
           "@id": "LCDB11_ER_CC18_24"
