@@ -7,7 +7,7 @@ openml_cache/*
 analysis/log/*
 analysis/backup/*
 analysis/plots/*
-
+analysis/database-accuracy.csv
 *.sh
 *.sif
 *.pyc

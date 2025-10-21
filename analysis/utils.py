@@ -5,7 +5,10 @@ from sklearn.metrics import mean_squared_error
 from tqdm import tqdm
 from pathlib import Path
 import h5py
-from meta_feature import anchor_list_denser, learner_zoo, learner_zoo_abbreviation
+# meta-feature
+anchor_list_denser = np.ceil(16 * 2 ** ((np.arange(137)) / 8)).astype(int)
+learner_zoo = [ 'SVM_Linear', 'SVM_Poly', 'SVM_RBF', 'SVM_Sigmoid', 'Decision Tree', 'ExtraTree','LogisticRegression', 'PassiveAggressive', 'Perceptron', 'RidgeClassifier', 'SGDClassifier', 'MLP', 'LDA', 'QDA', 'BernoulliNB', 'MultinomialNB', 'ComplementNB', 'GaussianNB','KNN', 'NearestCentroid', 'ens.ExtraTrees', 'ens.RandomForest', 'ens.GradientBoosting','DummyClassifier']
+learner_zoo_abbreviation = [ 'SVM_Linear', 'SVM_Poly', 'SVM_RBF', 'SVM_Sigmoid', 'DT', 'ET','LR', 'PA', 'Perceptron', 'Ridge', 'SGD', 'MLP', 'LDA', 'QDA', 'BernoulliNB', 'MultinomialNB', 'ComplementNB', 'GaussianNB','KNN', 'NC', 'ens.ET', 'ens.RF', 'ens.GB','Dummy']
 
 # from scipy.stats import t
 
