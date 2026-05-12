@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="title" content="LCDB 1.1 - Yan, Mohr, Viering">
+  <meta name="description" content="LCDB 1.1: A Database Illustrating Learning Curves Are More Ill-Behaved Than Previously Thought. NeurIPS 2025.">
+  <meta name="keywords" content="learning curves, machine learning, benchmark, database, LCDB, NeurIPS 2025">
+  <meta name="author" content="Cheng Yan, Felix Mohr, Tom Viering">
+  <title>LCDB 1.1 | NeurIPS 2025</title>
+
+  <link rel="icon" type="image/x-icon" href="static/images/favicon.ico">
+
+  <!-- Bulma CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+  <!-- FontAwesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Academicons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <!-- Custom -->
+  <link rel="stylesheet" href="static/css/index.css">
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <!-- jQuery (for carousel compat) -->
+  <script defer src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <!-- Explorer logic -->
+  <script defer src="static/js/lcdb_explorer.js"></script>
+</head>
+<body>
+
+<!-- ───────── HERO ───────── -->
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">
+            LCDB 1.1: A Database Illustrating Learning Curves Are More Ill-Behaved Than Previously Thought
+          </h1>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">Cheng Yan<sup>1</sup>,</span>
+            <span class="author-block">Felix Mohr<sup>2</sup>,</span>
+            <span class="author-block">
+              <a href="https://tomviering.nl" target="_blank">Tom Viering</a><sup>1</sup>
+            </span>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><sup>1</sup>Delft University of Technology &nbsp;&nbsp; <sup>2</sup>Universidad de La Sabana</span>
+          </div>
+
+          <!-- Links -->
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <span class="link-block">
+                <a href="https://arxiv.org/abs/2505.15657" target="_blank"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon"><i class="ai ai-arxiv"></i></span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="https://proceedings.neurips.cc/paper_files/paper/2025/file/1543d6d5cb976e4f9fbfaedf2e257967-Paper-Datasets_and_Benchmarks_Track.pdf" target="_blank"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon"><i class="fas fa-file-pdf"></i></span>
+                  <span>Paper</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="https://github.com/learning-curve-research/LCDB-1.1" target="_blank"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon"><i class="fab fa-github"></i></span>
+                  <span>Code</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="https://doi.org/10.4121/3bd18108-fad0-4e4c-affd-4341fba99306" target="_blank"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon"><i class="fas fa-database"></i></span>
+                  <span>Dataset</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="https://neurips.cc/virtual/2025/poster/121511" target="_blank"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon"><i class="fas fa-video"></i></span>
+                  <span>NeurIPS 2025</span>
+                </a>
+              </span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────── ABSTRACT ───────── -->
+<section class="section hero is-light">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            Sample-wise learning curves plot performance versus training set size. They are
+            useful for studying scaling laws and speeding up hyperparameter tuning and model
+            selection. Learning curves are often assumed to be well-behaved: monotone (i.e.
+            improving with more data) and convex. By constructing the Learning Curves
+            Database 1.1 (LCDB 1.1), a large-scale database with high-resolution learning
+            curves including more modern learners (CatBoost, TabNet, RealMLP, and TabPFN),
+            we show that learning curves are less often well-behaved than previously thought.
+            Using statistically rigorous methods, we observe significant ill-behavior in approximately 15% of the learning curves, almost twice as much as in previous estimates.
+            We also identify which learners are to blame and show that specific learners are
+            more ill-behaved than others. Additionally, we demonstrate that different feature
+            scalings rarely resolve ill-behavior. We evaluate the impact of ill-behavior on
+            downstream tasks, such as learning curve fitting and model selection, and find it
+            poses significant challenges, underscoring the relevance and potential of LCDB 1.1
+            as a challenging benchmark for future research.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────── INTERACTIVE EXPLORER ───────── -->
+<section class="section hero is-light" id="explorer">
+  <div class="container is-max-widescreen">
+    <h2 class="title is-3 has-text-centered">Interactive Learning Curve Explorer</h2>
+    <p class="subtitle has-text-centered is-6">
+      265 OpenML datasets, 28 learning algorithms, mean ± standard error across 25 random splits
+    </p>
+
+    <!-- Controls row -->
+    <div class="explorer-controls box">
+      <!-- Dataset selector -->
+      <div class="control-group">
+        <label class="control-label">
+          <i class="fas fa-database"></i> Dataset (OpenML ID)
+        </label>
+        <div class="dataset-search-wrap">
+          <input id="dataset-search" class="input is-small" type="text" placeholder="Search ID…">
+          <div class="select is-small">
+            <select id="dataset-select" size="1"></select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Learner dropdown -->
+      <div class="control-group learner-dropdown-wrap">
+        <label class="control-label">
+          <i class="fas fa-robot"></i> Learner
+        </label>
+        <button id="learner-dropdown-btn" class="button is-small">
+          <span id="learner-btn-label">9 selected</span>
+          <span class="icon is-small"><i class="fas fa-chevron-down"></i></span>
+        </button>
+        <div id="learner-dropdown-panel" class="learner-dropdown-panel">
+          <div id="learner-checkboxes"></div>
+        </div>
+      </div>
+
+      <!-- Split selector -->
+      <div class="control-group">
+        <label class="control-label">
+          <i class="fas fa-chart-line"></i> Split
+        </label>
+        <div class="split-buttons">
+          <label class="split-btn"><input type="checkbox" name="split" value="0"><span class="line-icon dashed"></span>Train</label>
+          <label class="split-btn active"><input type="checkbox" name="split" value="1" checked><span class="line-icon solid"></span>Val</label>
+          <label class="split-btn"><input type="checkbox" name="split" value="2"><span class="line-icon solid"></span>Test</label>
+        </div>
+      </div>
+
+      <!-- Y-axis range -->
+      <div class="control-group">
+        <label class="control-label">
+          <i class="fas fa-compress-alt"></i> Y-axis
+        </label>
+        <div class="split-buttons">
+          <label class="split-btn active"><input type="radio" name="yaxis" value="auto" checked> Auto</label>
+          <label class="split-btn"><input type="radio" name="yaxis" value="fixed"> 0–1</label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chart -->
+    <div class="box chart-box">
+      <div id="dataset-title" class="dataset-title"></div>
+      <div id="chart-loading" class="chart-loading" style="display:none">
+        <i class="fas fa-spinner fa-spin"></i> Loading…
+      </div>
+      <div class="chart-wrap">
+        <canvas id="lc-chart"></canvas>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ───────── BIBTEX ───────── -->
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <div class="bibtex-header">
+      <h2 class="title is-3">BibTeX</h2>
+      <button class="button is-small is-light" onclick="copyBibTeX()" id="copy-btn">
+        <span class="icon"><i class="fas fa-copy"></i></span>
+        <span>Copy</span>
+      </button>
+    </div>
+    <pre id="bibtex-code"><code>@article{yan2025lcdb,
+  title   = {LCDB 1.1: A database illustrating learning curves are more ill-behaved than previously thought},
+  author  = {Yan, Cheng and Mohr, Felix and Viering, Tom},
+  journal = {Advances in Neural Information Processing Systems},
+  volume  = {38},
+  year    = {2025}
+}</code></pre>
+  </div>
+</section>
+
+<!-- ───────── FOOTER ───────── -->
+<footer class="footer">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8 has-text-centered">
+        <p>
+          This page was built using the
+          <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">
+            Academic Project Page Template</a>.
+          Licensed under
+          <a href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">CC BY-SA 4.0</a>.
+        </p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+function copyBibTeX() {
+  const text = document.getElementById('bibtex-code').textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.getElementById('copy-btn');
+    btn.querySelector('span:last-child').textContent = 'Copied!';
+    setTimeout(() => btn.querySelector('span:last-child').textContent = 'Copy', 2000);
+  });
+}
+</script>
+
+</body>
+</html>

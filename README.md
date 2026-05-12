@@ -8,6 +8,11 @@
   </a>
 </p>
 
+## Interactive Tool
+
+Explore learning curves interactively at **[https://learning-curve-research.github.io/LCDB-1.1/](https://learning-curve-research.github.io/LCDB-1.1/)**.
+
+## Repository Structure
 
 ```
 📦 Project Root
@@ -62,8 +67,9 @@ If you find our work useful, please cite our paper:
 
 ```bibtex
 @article{yan2025lcdb,
-  title={LCDB 1.1: A Database Illustrating Learning Curves Are More Ill-Behaved Than Previously Thought},
+  title={LCDB 1.1: A database illustrating learning curves are more ill-behaved than previously thought},
   author={Yan, Cheng and Mohr, Felix and Viering, Tom},
-  journal={arXiv preprint arXiv:2505.15657},
+  journal={Advances in Neural Information Processing Systems},
+  volume={38},
   year={2025}
 }
