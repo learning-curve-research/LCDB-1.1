@@ -137,6 +137,8 @@
 
     <!-- Controls row -->
     <div class="explorer-controls box">
+      <!-- Row 1: Dataset + Learner -->
+      <div class="controls-row">
       <!-- Dataset selector -->
       <div class="control-group">
         <label class="control-label">
@@ -147,6 +149,10 @@
           <div class="select is-small">
             <select id="dataset-select" size="1"></select>
           </div>
+          <button id="random-dataset-btn" class="button is-small is-light dice-btn" title="Random dataset">
+            <span class="icon is-small"><i class="fas fa-dice"></i></span>
+            <span>Random</span>
+          </button>
         </div>
       </div>
 
@@ -155,24 +161,45 @@
         <label class="control-label">
           <i class="fas fa-robot"></i> Learner
         </label>
-        <button id="learner-dropdown-btn" class="button is-small">
-          <span id="learner-btn-label">9 selected</span>
-          <span class="icon is-small"><i class="fas fa-chevron-down"></i></span>
-        </button>
+        <div style="display:flex;gap:0.35rem;align-items:center;">
+          <button id="learner-dropdown-btn" class="button is-small">
+            <span id="learner-btn-label">9 selected</span>
+            <span class="icon is-small"><i class="fas fa-chevron-down"></i></span>
+          </button>
+          <button id="random-learner-btn" class="button is-small is-light dice-btn" title="Random learner">
+            <span class="icon is-small"><i class="fas fa-dice"></i></span>
+            <span>Random</span>
+          </button>
+        </div>
         <div id="learner-dropdown-panel" class="learner-dropdown-panel">
           <div id="learner-checkboxes"></div>
         </div>
       </div>
 
+      </div><!-- end row 1 -->
+
+      <!-- Row 2: Split + X-axis + Y-axis -->
+      <div class="controls-row">
       <!-- Split selector -->
       <div class="control-group">
         <label class="control-label">
-          <i class="fas fa-chart-line"></i> Split
+          <i class="fas fa-code-branch"></i> Split
         </label>
         <div class="split-buttons">
           <label class="split-btn"><input type="checkbox" name="split" value="0"><span class="line-icon dashed"></span>Train</label>
           <label class="split-btn active"><input type="checkbox" name="split" value="1" checked><span class="line-icon solid"></span>Val</label>
           <label class="split-btn"><input type="checkbox" name="split" value="2"><span class="line-icon solid"></span>Test</label>
+        </div>
+      </div>
+
+      <!-- X-axis scale -->
+      <div class="control-group">
+        <label class="control-label">
+          <i class="fas fa-arrows-alt-h"></i> X-axis
+        </label>
+        <div class="split-buttons">
+          <label class="split-btn active"><input type="radio" name="xaxis" value="linear" checked> Linear</label>
+          <label class="split-btn"><input type="radio" name="xaxis" value="log"> Log</label>
         </div>
       </div>
 
@@ -186,6 +213,8 @@
           <label class="split-btn"><input type="radio" name="yaxis" value="fixed"> 0–1</label>
         </div>
       </div>
+      </div><!-- end row 2 -->
+
     </div>
 
     <!-- Chart -->
@@ -202,6 +231,27 @@
   </div>
 </section>
 
+<!-- ───────── FIGURES ───────── -->
+<section class="section hero is-light">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Key Findings</h2>
+
+    <div class="content has-text-centered" style="margin-bottom: 2.5rem;">
+      <h3 class="title is-5">Ill-Behaved Learning Curves in Practice</h3>
+      <figure class="image">
+        <img src="static/images/LCDB11_shape.svg" alt="Ill-behaved learning curve shapes" style="max-width:80%;margin:0 auto;background:white;border-radius:4px;">
+      </figure>
+    </div>
+
+    <div class="content has-text-centered">
+      <h3 class="title is-5">More Ill-Behaved Than Previously Thought</h3>
+      <figure class="image">
+        <img src="static/images/LCDB11_table_learner.svg" alt="Ill-behavior per learner" style="max-width:80%;margin:0 auto;background:white;border-radius:4px;">
+      </figure>
+    </div>
+  </div>
+</section>
+
 <!-- ───────── BIBTEX ───────── -->
 <section class="section" id="BibTeX">
   <div class="container is-max-desktop content">
@@ -212,12 +262,12 @@
         <span>Copy</span>
       </button>
     </div>
-    <pre id="bibtex-code"><code>@article{yan2025lcdb,
-  title   = {LCDB 1.1: A database illustrating learning curves are more ill-behaved than previously thought},
-  author  = {Yan, Cheng and Mohr, Felix and Viering, Tom},
-  journal = {Advances in Neural Information Processing Systems},
-  volume  = {38},
-  year    = {2025}
+    <pre id="bibtex-code"><code>@inproceedings{yan2025lcdb,
+  title     = {LCDB 1.1: A Database Illustrating Learning Curves Are More Ill-Behaved Than Previously Thought},
+  author    = {Yan, Cheng and Mohr, Felix and Viering, Tom},
+  booktitle = {Advances in Neural Information Processing Systems},
+  volume    = {38},
+  year      = {2025}
 }</code></pre>
   </div>
 </section>

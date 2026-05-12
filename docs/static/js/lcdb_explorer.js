@@ -47,6 +47,7 @@
   const SPLIT_LABELS = ['Train', 'Val', 'Test'];
   const SPLIT_DASH   = [[6, 4], [], []];  // train=dashed, val=solid, test=solid
   let yAxisAuto = true;
+  let xAxisLog = false;
   // SVM_Linear=0, Decision Tree=4, KNN=18, ens.RandomForest=21, CatBoost=24
   let selectedLearners = new Set([0, 4, 18, 21, 24]);
 
@@ -76,10 +77,13 @@
     buildLearnerCheckboxes();
     buildLearnerDropdown();
     buildSplitControls();
+    buildXAxisControls();
     buildYAxisControls();
     updateDropdownLabel();
     updateColorDots();
     initChart();
+    document.getElementById('random-dataset-btn').addEventListener('click', randomDataset);
+    document.getElementById('random-learner-btn').addEventListener('click', randomLearner);
 
     // Load first dataset
     const firstId = meta.dataset_ids[0];
@@ -166,6 +170,20 @@
     });
   }
 
+  // ── X-axis scale radio controls ───────────────────────────────
+  function buildXAxisControls() {
+    document.querySelectorAll('input[name="xaxis"]').forEach(radio => {
+      radio.addEventListener('change', () => {
+        xAxisLog = radio.value === 'log';
+        radio.closest('.split-buttons').querySelectorAll('.split-btn').forEach(l => l.classList.remove('active'));
+        radio.closest('.split-btn').classList.add('active');
+        chart.destroy();
+        initChart();
+        updateChart();
+      });
+    });
+  }
+
   // ── Y-axis radio controls ─────────────────────────────────────
   function buildYAxisControls() {
     document.querySelectorAll('input[name="yaxis"]').forEach(radio => {
@@ -219,7 +237,7 @@
         animation: { duration: 150 },
         scales: {
           x: {
-            type: 'linear',
+            type: xAxisLog ? 'logarithmic' : 'linear',
             title: { display: true, text: 'Training Set Size', font: { size: 13 } },
             ticks: {
               callback: v => v >= 1000 ? `${(v / 1000).toFixed(0)}k` : v,
@@ -405,9 +423,26 @@
     });
 
     chart.data.datasets = datasets;
+    chart.options.scales.x.type = xAxisLog ? 'logarithmic' : 'linear';
     chart.options.scales.y.max = yAxisAuto ? undefined : 1;
     chart.options.scales.y.min = 0;
     chart.update();
+  }
+
+  // ── Dice buttons ──────────────────────────────────────────────
+  function randomDataset() {
+    const ids = meta.dataset_ids;
+    const randomId = ids[Math.floor(Math.random() * ids.length)];
+    document.getElementById('dataset-select').value = randomId;
+    document.getElementById('dataset-search').value = '';
+    loadDataset(randomId);
+  }
+
+  function randomLearner() {
+    const idx = Math.floor(Math.random() * meta.learners.length);
+    selectedLearners = new Set([idx]);
+    syncCheckboxes();
+    updateChart();
   }
 
   document.addEventListener('DOMContentLoaded', init);

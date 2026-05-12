@@ -8,7 +8,7 @@ body { font-family: 'Inter', sans-serif; }
 }
 
 .publication-authors { margin-top: 0.75rem; }
-.author-block a { color: #363636; text-decoration: underline dotted; }
+.author-block a { color: #363636; text-decoration: none; border-bottom: 1px dotted #363636; padding-bottom: 1px; }
 .author-block a:hover { color: #2563eb; }
 .eql-cntrb { color: #888; }
 
@@ -35,14 +35,20 @@ body { font-family: 'Inter', sans-serif; }
   margin-top: 0.4rem;
 }
 
-/* Explorer controls row */
+/* Explorer controls */
 .explorer-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.controls-row {
   display: flex;
   flex-wrap: wrap;
   gap: 1.5rem;
   align-items: flex-end;
-  padding: 1rem 1.25rem;
-  margin-bottom: 1rem;
 }
 
 .control-group { display: flex; flex-direction: column; gap: 0.4rem; }
@@ -61,7 +67,9 @@ body { font-family: 'Inter', sans-serif; }
   align-items: center;
 }
 .dataset-search-wrap .input { width: 100px; }
-.dataset-search-wrap .select select { min-width: 120px; }
+.dataset-search-wrap .select select { min-width: 86px; max-width: 86px; }
+.dice-btn { padding: 0 0.5rem; color: #888; }
+.dice-btn:hover { color: #2563eb; }
 
 /* Split / Y-axis radio buttons */
 .split-buttons { display: flex; gap: 0.25rem; }
