@@ -69,7 +69,7 @@ If you find our work useful, please cite our paper:
 @inproceedings{yan2025lcdb,
   title     = {LCDB 1.1: A Database Illustrating Learning Curves Are More Ill-Behaved Than Previously Thought},
   author    = {Yan, Cheng and Mohr, Felix and Viering, Tom},
-  booktitle = {Advances in Neural Information Processing Systems},
+  booktitle = {Advances in Neural Information Processing Systems (NeurIPS)},
   volume    = {38},
   year      = {2025}
 }
